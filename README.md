@@ -8,3 +8,6 @@ Downlaod latest:
 
 All Downloads:
 [![Files](https://curse.nikky.moe/api/img/293830/files?logo)](https://minecraft.curseforge.com/projects/293830/files)
+
+### Server lists known to work with this mod:
+- [MinecraftServers.biz](https://minecraftservers.biz)
