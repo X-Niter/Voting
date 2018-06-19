@@ -1,7 +1,8 @@
 package com.github.upcraftlp.votifier;
 
+import com.github.upcraftlp.votifier.command.CommandVote;
+import com.github.upcraftlp.votifier.config.RewardParser;
 import com.github.upcraftlp.votifier.config.VotifierConfig;
-import com.github.upcraftlp.votifier.event.VoteEventHandler;
 import com.github.upcraftlp.votifier.net.NetworkListenerThread;
 import com.github.upcraftlp.votifier.util.RSAUtil;
 import core.upcraftlp.craftdev.api.util.ModHelper;
@@ -62,7 +63,8 @@ public class ForgeVotifier {
             UpdateChecker.registerMod(MODID);
             debugMode = ModHelper.isDebugMode();
         }
-        VoteEventHandler.init(event);
+
+        RewardParser.init(event);
         if(debugMode) log.info("initiated vote listeners!");
     }
 
@@ -74,6 +76,7 @@ public class ForgeVotifier {
 
     @Mod.EventHandler
     public void onServerStarting(FMLServerStartingEvent event) {
+        if(VotifierConfig.voteCommandEnabled) event.registerServerCommand(new CommandVote());
         log.info("starting votifier thread...");
         String address = VotifierConfig.host;
         if(StringUtils.isNullOrEmpty(address)) address = event.getServer().getServerHostname(); //get the server-ip from the server.properties file

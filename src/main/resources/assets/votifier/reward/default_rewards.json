@@ -1,0 +1,25 @@
+{
+    "rewards": [
+        {
+            "type": "item",
+            "name": "minecraft:diamond",
+            "count": 2,
+            "nbt": "{display:{Name:\"Reward\",Lore:[\"Hello @PLAYER@,\",\"This is your\",\"voting reward from\",\"@SERVICE@\"]}}"
+        },
+        {
+            "type": "command",
+            "command": "gamemode 1 @PLAYER@"
+        },
+        {
+            "type": "chat",
+            "message": "[{\"text\":\"@PLAYER@\",\"color\":\"dark_aqua\"},{\"text\":\" just voted on \"},{\"text\":\"@SERVICE@\",\"color\":\"dark_aqua\"},{\"text\":\" and received their daily reward! get yours using \"},{\"text\":\"/vote\",\"color\":\"green\"},{\"text\":\" or by clicking \"},{\"text\":\"here\",\"clickEvent\":{\"action\":\"open_url\",\"value\":\"https://minecraft.curseforge.com/projects/293830\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"click to vote!\",\"color\":\"aqua\"}}},{\"text\":\"!\"}]",
+            "broadcast": true,
+            "tellraw": true
+        },
+        {
+            "type": "chat",
+            "message": "Congratulations @PLAYER@!\nYou just earned your daily reward!",
+            "broadcast": true
+        }
+    ]
+}
