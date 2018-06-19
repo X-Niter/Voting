@@ -79,6 +79,9 @@ public class ForgeVotifier {
         if(StringUtils.isNullOrEmpty(address)) address = event.getServer().getServerHostname(); //get the server-ip from the server.properties file
         if(StringUtils.isNullOrEmpty(address)) address = "0.0.0.0"; //fallback address
         networkListener = new NetworkListenerThread(address, VotifierConfig.port);
+        networkListener.setName("Vote-Listener");
+        networkListener.setPriority(Thread.MIN_PRIORITY);
+        networkListener.setDaemon(true);
         networkListener.start();
     }
 

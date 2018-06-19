@@ -30,8 +30,6 @@ public class NetworkListenerThread extends Thread {
 
     @Override
     public void run() {
-        this.setName("Vote-Listener");
-        this.setPriority(Thread.MIN_PRIORITY);
         try (ServerSocket serverSocket = new ServerSocket()) {
             serverSocket.bind(new InetSocketAddress(this.host, this.port));
             ForgeVotifier.getLogger().info("votifier running on {}:{}", this.host, this.port);
@@ -87,11 +85,13 @@ public class NetworkListenerThread extends Thread {
             this.isRunning = false;
             ForgeVotifier.getLogger().error("Votifier network error! Host: " + this.host + ", Port: " + this.port, e);
         }
-        ForgeVotifier.getLogger().info("votifier thread stopped!");
+        ForgeVotifier.getLogger().info("votifier thread is set to shut down!");
     }
 
     public void shutdown() {
-        isRunning = false;
+        this.isRunning = false;
+        this.interrupt();
+        ForgeVotifier.getLogger().info("votifier thread stopped!");
     }
 
     private static void error(String[] input) {
