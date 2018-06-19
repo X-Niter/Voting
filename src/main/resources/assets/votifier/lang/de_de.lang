@@ -1,0 +1,6 @@
+#PARSE_ESCAPES
+
+#Config
+config.votifier.title=Votifier Config
+config.votifier.port=Netzwerk-Port
+config.votifier.address=Host-Adresse
