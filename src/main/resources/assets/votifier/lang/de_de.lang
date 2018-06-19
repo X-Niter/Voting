@@ -4,3 +4,8 @@
 config.votifier.title=Votifier Config
 config.votifier.port=Netzwerk-Port
 config.votifier.address=Host-Adresse
+config.votifier.commandText=Abstimmungs-Befehlstext
+config.votifier.commandEnabled=Abstimmungs-Befehl aktiviert
+
+#Command
+command.votifier.vote.usage=/vote

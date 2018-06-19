@@ -4,3 +4,8 @@
 config.votifier.title=Votifier Konfiguration
 config.votifier.port=NetworkListener Port
 config.votifier.address=Host Address
+config.votifier.commandText=Vote Command Text
+config.votifier.commandEnabled=Enable Vote Command
+
+#Command
+command.votifier.vote.usage=/vote

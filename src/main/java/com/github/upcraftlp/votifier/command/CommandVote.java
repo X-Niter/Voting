@@ -15,7 +15,7 @@ public class CommandVote extends CommandBase {
 
     @Override
     public String getUsage(ICommandSender sender) {
-        return "command.votifier.vote";
+        return "command.votifier.vote.usage";
     }
 
     @Override
