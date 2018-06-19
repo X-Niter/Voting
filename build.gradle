@@ -18,6 +18,7 @@ buildscript {
 
 apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: 'com.matthewprenger.cursegradle'
+apply plugin: 'maven-publish'
 
 apply from: 'https://gist.githubusercontent.com/UpcraftLP/0a98a7dfe913bd3e99073efa7ad0353b/raw'
 //Only edit below this line, the above code adds and enables the nessasary things for Forge to be setup.
@@ -112,13 +113,74 @@ minecraft {
     clientJvmArgs += '-Dlog4j.skipJansi=true'
 }
 
+// API jar
+task apiJar(type: Jar) {
+    from sourceSets.main.output
+    from sourceSets.main.allJava
+    include "${project.api_package}/**"
+    from ("LICENSE") {
+        include "*"
+    }
+    manifest.mainAttributes(
+            "Built-On-Java": "${System.getProperty('java.vm.version')} + (${System.getProperty('java.vm.vendor')})",
+            "Implementation-Title": project.name + '-api',
+            "Implementation-Version": project.version,
+            "Maven-Artifact":"${project.group}:${project.archivesBaseName}:${project.version}:api",
+            "Built-On": "${mc_version}-${forge_version}"
+    )
+    classifier = 'api'
+}
+
+// Javadoc jar
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    from javadoc.destinationDir
+    from ("LICENSE") {
+        include "*"
+    }
+    manifest.mainAttributes(
+            "Built-On-Java": "${System.getProperty('java.vm.version')} + (${System.getProperty('java.vm.vendor')})",
+            "Implementation-Title": project.name + '-javadoc',
+            "Implementation-Version": project.version,
+            "Maven-Artifact":"${project.group}:${project.archivesBaseName}:${project.version}:javadoc",
+            "Built-On": "${mc_version}-${forge_version}"
+    )
+    classifier = 'javadoc'
+}
+
 jar {
+    from "LICENSE"
     manifest.mainAttributes(
             "Implementation-Title": project.name,
             "Implementation-Version": "${project.mod_version}",
             "Built-On": "${project.mc_version}-${project.forge_version}"
             //"FMLAT": "${project.modid}_at.cfg"
     )
+}
+
+task signApiJar(type: SignJar, dependsOn: apiJar) {
+    onlyIf {
+        project.hasProperty('sign_keyStore')
+    }
+    keyPass = findProperty('sign_keyPass')
+    keyStore = findProperty('sign_keyStore')
+    storePass = findProperty('sign_storePass')
+    alias = findProperty('sign_alias')
+
+    inputFile = apiJar.archivePath
+    outputFile = apiJar.archivePath
+}
+
+task signJavadocJar(type: SignJar, dependsOn: javadocJar) {
+    onlyIf {
+        project.hasProperty('sign_keyStore')
+    }
+    keyPass = findProperty('sign_keyPass')
+    keyStore = findProperty('sign_keyStore')
+    storePass = findProperty('sign_storePass')
+    alias = findProperty('sign_alias')
+
+    inputFile = javadocJar.archivePath
+    outputFile = javadocJar.archivePath
 }
 
 task signJar(type: SignJar, dependsOn: reobfJar) {
@@ -146,8 +208,27 @@ dependencies {
 
     deobfCompile "craftdev-core:craftdev-core:${project.mc_version}:${project.core_version}"
 }
-tasks.build.dependsOn signJar
+tasks.build.dependsOn signJar, signApiJar, signJavadocJar, publish
 tasks.curseforge.dependsOn build
+
+artifacts {
+    archives apiJar
+    archives javadocJar
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifact jar
+            artifact apiJar
+            artifact javadocJar
+        }
+    }
+
+    repositories {
+        mavenLocal()
+    }
+}
 
 def curseRelations = {
     //requiredLibrary '' //add curseforge-slug here
@@ -168,10 +249,9 @@ curseforge {
 
             relations curseRelations
 
-            //no such jars for now
-            //addArtifact javadocJar
+            addArtifact javadocJar
             //addArtifact sourceJar
-            //addArtifact apiJar
+            addArtifact apiJar
 
             //addGameVersion '1.12'
             //addGameVersion '1.12.1'
