@@ -33,8 +33,7 @@ public class RewardChat extends Reward {
         ForgeVotifier.getLogger().error("tellraw @p {}", msg);
         if(this.parseAsTellraw) {
             try {
-                ITextComponent textComponent = ITextComponent.Serializer.jsonToComponent(msg.replace("\"", "\\\""));
-                textComponent = ITextComponent.Serializer.jsonToComponent("[\"\",{\"text\":\"Test\",\"color\":\"aqua\"},{\"text\":\" just voted on \",\"color\":\"gold\"},{\"text\":\"MinecraftServers.biz\",\"color\":\"aqua\"},{\"text\":\" and received their daily reward!\",\"color\":\"gold\"},{\"text\":\"\"},{\"text\":\"Get yours using \",\"color\":\"gold\"},{\"text\":\"/vote\",\"color\":\"green\"},{\"text\":\" or by clicking \",\"color\":\"gold\"},{\"text\":\"here\",\"color\":\"aqua\",\"clickEvent\":{\"action\":\"open_url\",\"value\":\"https://minecraft.curseforge.com/projects/229905\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":[{\"text\":\"click to vote!\",\"color\":\"aqua\"}]}},{\"text\":\"!\",\"color\":\"gold\"}]");
+                ITextComponent textComponent = ITextComponent.Serializer.jsonToComponent(msg);
                 if(this.broadcastMessage) {
                     for(EntityPlayerMP playerMP : server.getPlayerList().getPlayers()) {
                         playerMP.sendMessage(TextComponentUtils.processComponent(server, textComponent, playerMP));
