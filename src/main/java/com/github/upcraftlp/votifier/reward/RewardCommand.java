@@ -1,5 +1,6 @@
-package com.github.upcraftlp.votifier.api.reward;
+package com.github.upcraftlp.votifier.reward;
 
+import com.github.upcraftlp.votifier.api.reward.Reward;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 

@@ -33,10 +33,12 @@ else if(project.hasProperty('dev_username')) {
     username = "${dev_username}"
 }
 
-version = "${project.mc_version}-${project.mod_version}"
+def buildVersion = project.mod_version + ext.buildName
+version = "${project.mc_version}-" + buildVersion
 group = project.maven_group // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 //noinspection GroovyUnusedAssignment
 archivesBaseName = project.modid
+tasks.build.doFirst { println("Current version is ${modid}-${version}") }
 
 sourceCompatibility = targetCompatibility = project.jvm_version // Need this here so eclipse task generates correctly.
 compileJava {

@@ -1,6 +1,7 @@
-package com.github.upcraftlp.votifier.api.reward;
+package com.github.upcraftlp.votifier.reward;
 
 import com.github.upcraftlp.votifier.ForgeVotifier;
+import com.github.upcraftlp.votifier.api.reward.Reward;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;

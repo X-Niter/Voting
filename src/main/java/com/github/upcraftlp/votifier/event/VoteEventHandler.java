@@ -3,10 +3,15 @@ package com.github.upcraftlp.votifier.event;
 import com.github.upcraftlp.votifier.ForgeVotifier;
 import com.github.upcraftlp.votifier.api.VoteReceivedEvent;
 import com.github.upcraftlp.votifier.api.reward.Reward;
+import com.github.upcraftlp.votifier.api.reward.RewardStore;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
 import java.util.Iterator;
@@ -18,7 +23,7 @@ public class VoteEventHandler {
 
     private static final List<Reward> REWARDS = new LinkedList<>();
 
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.LOW)
     public static void voteMade(VoteReceivedEvent event) {
         Iterator<Reward> iterator = REWARDS.iterator();
         MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
@@ -36,5 +41,11 @@ public class VoteEventHandler {
 
     public static void addReward(Reward reward) {
         REWARDS.add(reward);
+    }
+
+    @SubscribeEvent(priority = EventPriority.LOW)
+    public static void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
+        int rewardCount = RewardStore.getStore().getOutStandingRewardCount(event.player.getName());
+        if(rewardCount > 0) event.player.sendMessage(new TextComponentString("You have " + rewardCount + " rewards outstanding, use " + TextFormatting.GREEN + "/vote claim" + TextFormatting.RESET + " to claim!"));
     }
 }

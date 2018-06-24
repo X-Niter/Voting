@@ -2,8 +2,10 @@ package com.github.upcraftlp.votifier.net;
 
 import com.github.upcraftlp.votifier.ForgeVotifier;
 import com.github.upcraftlp.votifier.api.VoteReceivedEvent;
+import com.github.upcraftlp.votifier.api.reward.RewardStore;
 import com.github.upcraftlp.votifier.util.RSAUtil;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.server.management.PlayerList;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
@@ -48,12 +50,12 @@ public class NetworkListenerThread extends Thread {
                         if(lines.length < 5) {
                             error(lines);
                         } else {
-                            String opcode = lines[0];
+                            String opcode = lines[0].trim();
                             if("VOTE".equals(opcode)) {
-                                String service = lines[1];
-                                String username = lines[2];
-                                String address = lines[3];
-                                String timestampString = lines[4];
+                                String service = lines[1].trim();
+                                String username = lines[2].trim();
+                                String address = lines[3].trim();
+                                String timestampString = lines[4].trim();
                                 long timestamp;
                                 try {
                                     timestamp = DATE_FORMAT.parse(timestampString).getTime();
@@ -64,9 +66,20 @@ public class NetworkListenerThread extends Thread {
                                 }
                                 FMLCommonHandler.instance().getMinecraftServerInstance().addScheduledTask(() -> { //ensure we are not handling the event on the network thread
                                     ForgeVotifier.getLogger().info("received vote from {} at {} from service {}", username, timestamp, service);
-                                    EntityPlayerMP player = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayerByUsername(username);
-                                    if(player != null) { //TODO store votes that were made offline and delay event?
-                                        MinecraftForge.EVENT_BUS.post(new VoteReceivedEvent(player, service, address, timestamp));
+                                    PlayerList playerList = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList();
+                                    boolean found = false;
+                                    for(String name : playerList.getOnlinePlayerNames()) {
+                                        if(name.equalsIgnoreCase(username)) {
+                                            EntityPlayerMP player = playerList.getPlayerByUsername(username);
+                                            if(player != null) {
+                                                MinecraftForge.EVENT_BUS.post(new VoteReceivedEvent(player, service, address, timestamp));
+                                                found = true;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                    if(!found) {
+                                        RewardStore.getStore().storePlayerReward(username, service, address, timestamp);
                                     }
                                 });
                             } else {
