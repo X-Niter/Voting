@@ -53,7 +53,7 @@ public class RewardParser {
                         case "chat":
                             String msgRaw = object.get("message").getAsString();
                             boolean broadcast = object.has("broadcast") && object.get("broadcast").getAsBoolean();
-                            boolean parseAsTellraw = object.has("telraw") && object.get("tellraw").getAsBoolean();
+                            boolean parseAsTellraw = object.has("tellraw") && object.get("tellraw").getAsBoolean();
                             reward = new RewardChat(msgRaw, broadcast, parseAsTellraw);
                             break;
                         case "item":

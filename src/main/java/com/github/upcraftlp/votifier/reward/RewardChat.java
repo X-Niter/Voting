@@ -2,7 +2,6 @@ package com.github.upcraftlp.votifier.reward;
 
 import com.github.upcraftlp.votifier.ForgeVotifier;
 import com.github.upcraftlp.votifier.api.reward.Reward;
-import net.minecraft.command.CommandException;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
@@ -30,7 +29,6 @@ public class RewardChat extends Reward {
     @Override
     public void activate(MinecraftServer server, EntityPlayer player, long timestamp, String service, String address) {
         String msg = replace(messageRaw, player, service);
-        ForgeVotifier.getLogger().error("tellraw @p {}", msg);
         if(this.parseAsTellraw) {
             try {
                 ITextComponent textComponent = ITextComponent.Serializer.jsonToComponent(msg);
@@ -41,7 +39,7 @@ public class RewardChat extends Reward {
                 }
                 else player.sendMessage(TextComponentUtils.processComponent(server, textComponent, player));
             }
-            catch(CommandException e) {
+            catch(Exception e) {
                 ForgeVotifier.getLogger().error("error parsing chat reward!", e);
             }
         }
