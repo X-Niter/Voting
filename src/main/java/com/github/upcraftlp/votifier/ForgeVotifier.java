@@ -1,9 +1,11 @@
 package com.github.upcraftlp.votifier;
 
+import com.github.upcraftlp.votifier.api.reward.RewardStore;
 import com.github.upcraftlp.votifier.command.CommandVote;
 import com.github.upcraftlp.votifier.config.RewardParser;
 import com.github.upcraftlp.votifier.config.VotifierConfig;
 import com.github.upcraftlp.votifier.net.NetworkListenerThread;
+import com.github.upcraftlp.votifier.reward.store.RewardStoreWorldSavedData;
 import com.github.upcraftlp.votifier.util.ModUpdateHandler;
 import com.github.upcraftlp.votifier.util.RSAUtil;
 import core.upcraftlp.craftdev.api.util.ModHelper;
@@ -16,6 +18,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartedEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.event.FMLServerStoppingEvent;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -100,6 +103,7 @@ public class ForgeVotifier {
     @Mod.EventHandler
     public void onServerStarted(FMLServerStartedEvent event) {
         ModUpdateHandler.notifyServer();
+        ReflectionHelper.setPrivateValue(RewardStore.class, null, RewardStoreWorldSavedData.get(), "INSTANCE");
         if(isDebugMode()) log.info("server started successfully!");
     }
 

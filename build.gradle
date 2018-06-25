@@ -117,8 +117,7 @@ minecraft {
 
 // API jar
 task apiJar(type: Jar) {
-    from sourceSets.main.output
-    from sourceSets.main.allJava
+    from sourceSets.api.allJava
     include "${project.api_package}/**"
     from ("LICENSE") {
         include "*"
@@ -150,6 +149,7 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
 }
 
 jar {
+    from sourceSets.api.output
     from "LICENSE"
     manifest.mainAttributes(
             "Implementation-Title": project.name,
