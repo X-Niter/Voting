@@ -1,10 +1,11 @@
 {
-  "homepage": "https://minecraft.curseforge.com/projects/293830",
-  "promos": {
-    "1.12.2-latest": "1.0.0",
-    "1.12.2-recommended": "1.0.0"
-  },
-  "1.12.2": {
-	"1.0.0": "* initial release"
-  }
+    "homepage": "https://minecraft.curseforge.com/projects/293830",
+    "promos": {
+        "1.12.2-latest": "1.1.0",
+        "1.12.2-recommended": "1.1.0"
+    },
+    "1.12.2": {
+        "1.1.0": "* offline rewards can now be stored\n* fixed tellraw text parsing",
+        "1.0.0": "* initial release"
+    }
 }
