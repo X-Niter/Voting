@@ -5,6 +5,7 @@
         "1.12.2-recommended": "1.1.0"
     },
     "1.12.2": {
+        "1.1.1": "* NPE fix",
         "1.1.0": "* offline rewards can now be stored\n* fixed tellraw text parsing",
         "1.0.0": "* initial release"
     }

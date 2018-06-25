@@ -76,6 +76,7 @@ public class RewardStoreWorldSavedData extends WorldSavedData implements IReward
             NBTTagCompound nbt = new NBTTagCompound();
             nbt.setString("player", playerName);
             List<StoredReward> rewards = STORED_REWARDS.get(playerName);
+            if(rewards == null) continue;
             NBTTagList playerRewardList = new NBTTagList();
             for(StoredReward reward : rewards) {
                 NBTTagCompound rewardTag = new NBTTagCompound();
