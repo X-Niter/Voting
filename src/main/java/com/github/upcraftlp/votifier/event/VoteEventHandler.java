@@ -4,9 +4,8 @@ import com.github.upcraftlp.votifier.ForgeVotifier;
 import com.github.upcraftlp.votifier.api.VoteReceivedEvent;
 import com.github.upcraftlp.votifier.api.reward.Reward;
 import com.github.upcraftlp.votifier.api.reward.RewardStore;
+import com.github.upcraftlp.votifier.command.CommandVote;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -46,6 +45,6 @@ public class VoteEventHandler {
     @SubscribeEvent(priority = EventPriority.LOW)
     public static void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
         int rewardCount = RewardStore.getStore().getOutStandingRewardCount(event.player.getName());
-        if(rewardCount > 0) event.player.sendMessage(new TextComponentString("You have " + rewardCount + " rewards outstanding, use " + TextFormatting.GREEN + "/vote claim" + TextFormatting.RESET + " to claim!"));
+        if(rewardCount > 0) event.player.sendMessage(CommandVote.getOutstandingRewardsText(rewardCount));
     }
 }
