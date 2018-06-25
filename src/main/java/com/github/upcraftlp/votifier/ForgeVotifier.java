@@ -4,6 +4,7 @@ import com.github.upcraftlp.votifier.command.CommandVote;
 import com.github.upcraftlp.votifier.config.RewardParser;
 import com.github.upcraftlp.votifier.config.VotifierConfig;
 import com.github.upcraftlp.votifier.net.NetworkListenerThread;
+import com.github.upcraftlp.votifier.util.ModUpdateHandler;
 import com.github.upcraftlp.votifier.util.RSAUtil;
 import core.upcraftlp.craftdev.api.util.ModHelper;
 import core.upcraftlp.craftdev.api.util.UpdateChecker;
@@ -12,6 +13,7 @@ import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartedEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.event.FMLServerStoppingEvent;
 import org.apache.logging.log4j.LogManager;
@@ -44,10 +46,11 @@ public class ForgeVotifier {
     public static final String UPDATE_JSON = "@UPDATE_JSON@";
 
     public static final String FINGERPRINT_KEY = "@FINGERPRINTKEY@";
+    private static boolean CORE_LOADED;
     private NetworkListenerThread networkListener;
 
     private static final Logger log = LogManager.getLogger(MODID);
-    public static boolean debugMode = false;
+    private static boolean debugMode = false;
 
     public static Logger getLogger() {
         return log;
@@ -57,21 +60,27 @@ public class ForgeVotifier {
         return debugMode;
     }
 
+    public static boolean isCoreLoaded() {
+        return CORE_LOADED;
+    }
+
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
-        if(Loader.isModLoaded("craftdev-core")) {
-            UpdateChecker.registerMod(MODID);
-            debugMode = ModHelper.isDebugMode();
+        CORE_LOADED = Loader.isModLoaded("craftdev-core");
+        if(VotifierConfig.updates.enableUpdateChecker) {
+            if(isCoreLoaded()) {
+                UpdateChecker.registerMod(MODID);
+                debugMode = ModHelper.isDebugMode();
+            }
         }
-
         RewardParser.init(event);
-        if(debugMode) log.info("initiated vote listeners!");
+        if(isDebugMode()) log.info("initiated vote listeners!");
     }
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
         RSAUtil.init();
-        if(debugMode) log.info("Loaded Votifier RSA Key!");
+        if(isDebugMode()) log.info("Loaded Votifier RSA Key!");
     }
 
     @Mod.EventHandler
@@ -86,6 +95,12 @@ public class ForgeVotifier {
         networkListener.setPriority(Thread.MIN_PRIORITY);
         networkListener.setDaemon(true);
         networkListener.start();
+    }
+
+    @Mod.EventHandler
+    public void onServerStarted(FMLServerStartedEvent event) {
+        ModUpdateHandler.notifyServer();
+        if(isDebugMode()) log.info("server started successfully!");
     }
 
     @Mod.EventHandler

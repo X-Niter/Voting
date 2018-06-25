@@ -39,6 +39,22 @@ public class VotifierConfig {
     @Config.Comment({"How many rewards a player can receive while offline, must be claimed via \"/vote claim\"", "set to 0 to disable"})
     public static int maxOfflineRewards = 5;
 
+    @Config.RequiresMcRestart
+    @Config.Name("Update-Checker")
+    @Config.Comment({"configure the update checker"})
+    public static Updates updates = new Updates();
+
+    public static class Updates {
+
+        @Config.Name("Enable Update Checker")
+        @Config.Comment({"whether to announce updates to opped players", "Note: available updates will be logged to console regardless"})
+        public boolean enableUpdateChecker = true;
+
+        @Config.Name("Show Beta Updates")
+        @Config.Comment("whether or not to also show beta updates")
+        public boolean showBetaUpdates = false;
+    }
+
     @Mod.EventBusSubscriber(modid = MODID)
     public static class Handler {
 

@@ -5,7 +5,11 @@ import com.github.upcraftlp.votifier.api.VoteReceivedEvent;
 import com.github.upcraftlp.votifier.api.reward.Reward;
 import com.github.upcraftlp.votifier.api.reward.RewardStore;
 import com.github.upcraftlp.votifier.command.CommandVote;
+import com.github.upcraftlp.votifier.config.VotifierConfig;
+import com.github.upcraftlp.votifier.util.ModUpdateHandler;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraftforge.common.ForgeVersion;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -46,5 +50,12 @@ public class VoteEventHandler {
     public static void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
         int rewardCount = RewardStore.getStore().getOutStandingRewardCount(event.player.getName());
         if(rewardCount > 0) event.player.sendMessage(CommandVote.getOutstandingRewardsText(rewardCount));
+        MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
+        if(VotifierConfig.updates.enableUpdateChecker && server.getPlayerList().getOppedPlayers().getPermissionLevel(event.player.getGameProfile()) == server.getOpPermissionLevel()) { //player is opped
+            ForgeVersion.CheckResult result = ModUpdateHandler.getResult();
+            if(VotifierConfig.updates.enableUpdateChecker && ModUpdateHandler.hasUpdate(result)) {
+                event.player.sendMessage(new TextComponentString("There's an update available for " + ForgeVotifier.MODNAME + ", check the server log for details!"));
+            }
+        }
     }
 }
