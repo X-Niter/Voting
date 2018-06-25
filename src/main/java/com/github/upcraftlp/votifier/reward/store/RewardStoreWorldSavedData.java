@@ -93,7 +93,7 @@ public class RewardStoreWorldSavedData extends WorldSavedData implements IReward
 
     @Override
     public int getOutStandingRewardCount(String playerName) {
-        return Math.min(STORED_REWARDS.get(playerName.toLowerCase(Locale.ROOT)).size(), getMaxStoredRewards());
+        return Math.min(getRewardsForPlayer(playerName).size(), getMaxStoredRewards());
     }
 
     @Override
