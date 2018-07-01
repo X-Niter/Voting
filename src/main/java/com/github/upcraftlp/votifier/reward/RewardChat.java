@@ -5,9 +5,9 @@ import com.github.upcraftlp.votifier.api.reward.Reward;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextComponentUtils;
+import net.minecraft.util.ChatComponentProcessor;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.IChatComponent;
 
 public class RewardChat extends Reward {
 
@@ -31,13 +31,13 @@ public class RewardChat extends Reward {
         String msg = replace(messageRaw, player, service);
         if(this.parseAsTellraw) {
             try {
-                ITextComponent textComponent = ITextComponent.Serializer.jsonToComponent(msg);
+                IChatComponent textComponent = IChatComponent.Serializer.jsonToComponent(msg);
                 if(this.broadcastMessage) {
-                    for(EntityPlayerMP playerMP : server.getPlayerList().getPlayerList()) {
-                        playerMP.addChatComponentMessage(TextComponentUtils.processComponent(server, textComponent, playerMP));
+                    for(EntityPlayerMP playerMP : server.getConfigurationManager().getPlayerList()) {
+                        playerMP.addChatComponentMessage(ChatComponentProcessor.processComponent(server, textComponent, playerMP));
                     }
                 }
-                else player.addChatComponentMessage(TextComponentUtils.processComponent(server, textComponent, player));
+                else player.addChatComponentMessage(ChatComponentProcessor.processComponent(server, textComponent, player));
             }
             catch(Exception e) {
                 ForgeVotifier.getLogger().error("error parsing chat reward!", e);
@@ -46,8 +46,8 @@ public class RewardChat extends Reward {
         else {
             String[] messages = msg.split("\n");
             for(String messageString : messages) {
-                ITextComponent textComponent = new TextComponentString(messageString);
-                if(this.broadcastMessage) server.getPlayerList().sendChatMsg(textComponent);
+                IChatComponent textComponent = new ChatComponentText(messageString);
+                if(this.broadcastMessage) server.getConfigurationManager().sendChatMsg(textComponent);
                 else player.addChatComponentMessage(textComponent);
             }
         }

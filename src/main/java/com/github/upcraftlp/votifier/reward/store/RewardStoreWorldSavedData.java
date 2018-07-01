@@ -9,6 +9,7 @@ import com.google.common.collect.Maps;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldSavedData;
 import net.minecraft.world.storage.MapStorage;
@@ -41,7 +42,7 @@ public class RewardStoreWorldSavedData extends WorldSavedData implements IReward
 
     public static RewardStoreWorldSavedData get(World world) {
         MapStorage storage = world.getMapStorage();
-        RewardStoreWorldSavedData instance = (RewardStoreWorldSavedData) storage.getOrLoadData(RewardStoreWorldSavedData.class, DATA_NAME);
+        RewardStoreWorldSavedData instance = (RewardStoreWorldSavedData) storage.loadData(RewardStoreWorldSavedData.class, DATA_NAME);
         if(instance == null) {
             instance = new RewardStoreWorldSavedData();
             storage.setData(DATA_NAME, instance);
@@ -70,7 +71,7 @@ public class RewardStoreWorldSavedData extends WorldSavedData implements IReward
     }
 
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+    public void writeToNBT(NBTTagCompound compound) {
         NBTTagList list = new NBTTagList();
         for(String playerName : STORED_REWARDS.keySet()) {
             NBTTagCompound nbt = new NBTTagCompound();
@@ -89,7 +90,6 @@ public class RewardStoreWorldSavedData extends WorldSavedData implements IReward
             list.appendTag(nbt);
         }
         compound.setTag(DATA_NAME, list);
-        return compound;
     }
 
     @Override
@@ -123,7 +123,7 @@ public class RewardStoreWorldSavedData extends WorldSavedData implements IReward
 
     @Override
     public void claimRewards(String name) {
-        EntityPlayerMP player = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayerByUsername(name);
+        EntityPlayerMP player = MinecraftServer.getServer().getConfigurationManager().getPlayerByUsername(name);
         List<StoredReward> rewards = getRewardsForPlayer(name);
         if(player != null) {
             for(int i = 0; i < Math.min(getMaxStoredRewards(), rewards.size()); i++) {

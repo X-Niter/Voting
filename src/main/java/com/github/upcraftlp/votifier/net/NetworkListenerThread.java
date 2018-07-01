@@ -5,7 +5,7 @@ import com.github.upcraftlp.votifier.api.VoteReceivedEvent;
 import com.github.upcraftlp.votifier.api.reward.RewardStore;
 import com.github.upcraftlp.votifier.util.RSAUtil;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.server.management.PlayerList;
+import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
@@ -66,11 +66,10 @@ public class NetworkListenerThread extends Thread {
                                 }
                                 FMLCommonHandler.instance().getMinecraftServerInstance().addScheduledTask(() -> { //ensure we are not handling the event on the network thread
                                     ForgeVotifier.getLogger().info("received vote from {} at {} from service {}", username, timestamp, service);
-                                    PlayerList playerList = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList();
                                     boolean found = false;
-                                    for(String name : playerList.getAllUsernames()) {
+                                    for(String name : MinecraftServer.getServer().getConfigurationManager().getAllUsernames()) {
                                         if(name.equalsIgnoreCase(username)) {
-                                            EntityPlayerMP player = playerList.getPlayerByUsername(username);
+                                            EntityPlayerMP player = MinecraftServer.getServer().getConfigurationManager().getPlayerByUsername(username);
                                             if(player != null) {
                                                 MinecraftForge.EVENT_BUS.post(new VoteReceivedEvent(player, service, address, timestamp));
                                                 found = true;

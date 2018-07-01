@@ -1,8 +1,7 @@
 package com.github.upcraftlp.votifier.api.reward;
 
 import com.github.upcraftlp.votifier.api.IRewardStore;
-
-import javax.annotation.Nullable;
+import com.sun.istack.internal.Nullable;
 
 public class RewardStore {
 

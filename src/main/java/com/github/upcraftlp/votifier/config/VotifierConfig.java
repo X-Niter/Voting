@@ -48,7 +48,7 @@ public class VotifierConfig {
 
         @SubscribeEvent
         public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event) {
-            if(event.getModID().equals(MODID)) {
+            if(event.modID.equals(MODID)) {
                 syncConfig();
             }
         }
