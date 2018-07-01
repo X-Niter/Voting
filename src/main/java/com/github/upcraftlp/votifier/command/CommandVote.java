@@ -9,6 +9,7 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
@@ -16,6 +17,9 @@ import net.minecraft.util.text.TextComponentUtils;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.event.ClickEvent;
 import net.minecraft.util.text.event.HoverEvent;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 public class CommandVote extends CommandBase {
 
@@ -63,5 +67,11 @@ public class CommandVote extends CommandBase {
         ITextComponent comp5 = new TextComponentString(" to claim them!");
         comp1.appendSibling(comp2).appendSibling(comp3).appendSibling(comp4).appendSibling(comp5);
         return comp1;
+    }
+
+    @Override
+    public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
+        if(args.length == 1) return getListOfStringsMatchingLastWord(args, "claim");
+        return super.getTabCompletions(server, sender, args, targetPos);
     }
 }
