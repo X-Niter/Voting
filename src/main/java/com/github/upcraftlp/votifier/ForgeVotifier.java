@@ -8,10 +8,7 @@ import com.github.upcraftlp.votifier.net.NetworkListenerThread;
 import com.github.upcraftlp.votifier.reward.store.RewardStoreWorldSavedData;
 import com.github.upcraftlp.votifier.util.ModUpdateHandler;
 import com.github.upcraftlp.votifier.util.RSAUtil;
-import core.upcraftlp.craftdev.api.util.ModHelper;
-import core.upcraftlp.craftdev.api.util.UpdateChecker;
 import net.minecraft.util.StringUtils;
-import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -49,7 +46,6 @@ public class ForgeVotifier {
     public static final String UPDATE_JSON = "@UPDATE_JSON@";
 
     public static final String FINGERPRINT_KEY = "@FINGERPRINTKEY@";
-    private static boolean CORE_LOADED;
     private NetworkListenerThread networkListener;
 
     private static final Logger log = LogManager.getLogger(MODID);
@@ -63,19 +59,8 @@ public class ForgeVotifier {
         return debugMode;
     }
 
-    public static boolean isCoreLoaded() {
-        return CORE_LOADED;
-    }
-
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
-        CORE_LOADED = Loader.isModLoaded("craftdev-core");
-        if(VotifierConfig.updates.enableUpdateChecker) {
-            if(isCoreLoaded()) {
-                UpdateChecker.registerMod(MODID);
-                debugMode = ModHelper.isDebugMode();
-            }
-        }
         RewardParser.init(event);
         if(isDebugMode()) log.info("initiated vote listeners!");
     }

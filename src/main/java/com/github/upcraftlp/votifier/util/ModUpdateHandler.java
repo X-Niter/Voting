@@ -22,7 +22,6 @@ public class ModUpdateHandler {
     }
 
     public static void notifyServer() {
-        if(ForgeVotifier.isCoreLoaded()) return;
         ForgeVersion.CheckResult result = getResult();
         if (hasUpdate(result)) {
             StringBuilder builder = new StringBuilder();
