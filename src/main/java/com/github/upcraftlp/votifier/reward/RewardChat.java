@@ -1,11 +1,10 @@
 package com.github.upcraftlp.votifier.reward;
 
 import com.github.upcraftlp.votifier.ForgeVotifier;
-import com.github.upcraftlp.votifier.api.reward.Reward;
+import api.reward.Reward;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.ChatComponentProcessor;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.IChatComponent;
 
@@ -37,10 +36,10 @@ public class RewardChat extends Reward {
                 IChatComponent textComponent = IChatComponent.Serializer.jsonToComponent(msg);
                 if(this.broadcastMessage) {
                     for(EntityPlayerMP playerMP : (List<EntityPlayerMP>) server.getConfigurationManager().playerEntityList) {
-                        playerMP.addChatComponentMessage(ChatComponentProcessor.processComponent(server, textComponent, playerMP));
+                        playerMP.addChatComponentMessage(textComponent);
                     }
                 }
-                else player.addChatComponentMessage(ChatComponentProcessor.processComponent(server, textComponent, player));
+                else player.addChatComponentMessage(textComponent);
             }
             catch(Exception e) {
                 ForgeVotifier.getLogger().error("error parsing chat reward!", e);

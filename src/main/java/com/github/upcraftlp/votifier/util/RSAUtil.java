@@ -2,7 +2,7 @@ package com.github.upcraftlp.votifier.util;
 
 import com.github.upcraftlp.votifier.ForgeVotifier;
 import com.google.common.io.Files;
-import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraft.server.MinecraftServer;
 import org.apache.commons.io.FileUtils;
 
 import javax.crypto.Cipher;
@@ -39,7 +39,7 @@ public class RSAUtil {
     }
 
     public static void init() {
-        RSA_KEYPAIR = loadOrGenerateKeyPair(new File(FMLCommonHandler.instance().getMinecraftServerInstance().getDataDirectory(), "config/votifier/.ssh"));
+        RSA_KEYPAIR = loadOrGenerateKeyPair(MinecraftServer.getServer().getFile("config/votifier/.ssh"));
     }
 
     private static KeyPair loadOrGenerateKeyPair(File directory) {

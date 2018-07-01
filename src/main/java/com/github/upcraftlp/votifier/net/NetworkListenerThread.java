@@ -1,13 +1,12 @@
 package com.github.upcraftlp.votifier.net;
 
 import com.github.upcraftlp.votifier.ForgeVotifier;
-import com.github.upcraftlp.votifier.api.VoteReceivedEvent;
-import com.github.upcraftlp.votifier.api.reward.RewardStore;
+import api.VoteReceivedEvent;
+import api.reward.RewardStore;
 import com.github.upcraftlp.votifier.util.RSAUtil;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import java.io.BufferedWriter;
 import java.io.InputStream;
@@ -64,23 +63,21 @@ public class NetworkListenerThread extends Thread {
                                     ForgeVotifier.getLogger().error("invalid vote timestamp!", e);
                                     continue; //timestamp is invalid
                                 }
-                                FMLCommonHandler.instance().getMinecraftServerInstance().addScheduledTask(() -> { //ensure we are not handling the event on the network thread
-                                    ForgeVotifier.getLogger().info("received vote from {} at {} from service {}", username, timestamp, service);
-                                    boolean found = false;
-                                    for(String name : MinecraftServer.getServer().getConfigurationManager().getAllUsernames()) {
-                                        if(name.equalsIgnoreCase(username)) {
-                                            EntityPlayerMP player = MinecraftServer.getServer().getConfigurationManager().getPlayerByUsername(username);
-                                            if(player != null) {
-                                                MinecraftForge.EVENT_BUS.post(new VoteReceivedEvent(player, service, address, timestamp));
-                                                found = true;
-                                                break;
-                                            }
+                                ForgeVotifier.getLogger().info("received vote from {} at {} from service {}", username, timestamp, service);
+                                boolean found = false;
+                                for(String name : MinecraftServer.getServer().getConfigurationManager().getAllUsernames()) {
+                                    if(name.equalsIgnoreCase(username)) {
+                                        EntityPlayerMP player = MinecraftServer.getServer().getConfigurationManager().getPlayerByUsername(username);
+                                        if(player != null) {
+                                            MinecraftForge.EVENT_BUS.post(new VoteReceivedEvent(player, service, address, timestamp));
+                                            found = true;
+                                            break;
                                         }
                                     }
-                                    if(!found) {
-                                        RewardStore.getStore().storePlayerReward(username, service, address, timestamp);
-                                    }
-                                });
+                                }
+                                if(!found) {
+                                    RewardStore.getStore().storePlayerReward(username, service, address, timestamp);
+                                }
                             } else {
                                 error(lines);
                             }

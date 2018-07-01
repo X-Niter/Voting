@@ -1,4 +1,4 @@
-package com.github.upcraftlp.votifier.api.reward;
+package api.reward;
 
 public class StoredReward {
 

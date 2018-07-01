@@ -1,9 +1,9 @@
 package com.github.upcraftlp.votifier.reward.store;
 
 import com.github.upcraftlp.votifier.ForgeVotifier;
-import com.github.upcraftlp.votifier.api.IRewardStore;
-import com.github.upcraftlp.votifier.api.VoteReceivedEvent;
-import com.github.upcraftlp.votifier.api.reward.StoredReward;
+import api.IRewardStore;
+import api.VoteReceivedEvent;
+import api.reward.StoredReward;
 import com.github.upcraftlp.votifier.config.VotifierConfig;
 import com.google.common.collect.Maps;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -15,7 +15,6 @@ import net.minecraft.world.WorldSavedData;
 import net.minecraft.world.storage.MapStorage;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -37,11 +36,11 @@ public class RewardStoreWorldSavedData extends WorldSavedData implements IReward
     }
 
     public static RewardStoreWorldSavedData get() {
-        return get(FMLCommonHandler.instance().getMinecraftServerInstance().getEntityWorld());
+        return get(MinecraftServer.getServer().getEntityWorld());
     }
 
     public static RewardStoreWorldSavedData get(World world) {
-        MapStorage storage = world.getMapStorage();
+        MapStorage storage = world.mapStorage;
         RewardStoreWorldSavedData instance = (RewardStoreWorldSavedData) storage.loadData(RewardStoreWorldSavedData.class, DATA_NAME);
         if(instance == null) {
             instance = new RewardStoreWorldSavedData();

@@ -1,6 +1,6 @@
-package com.github.upcraftlp.votifier.api.reward;
+package api.reward;
 
-import com.github.upcraftlp.votifier.api.IRewardStore;
+import api.IRewardStore;
 
 public class RewardStore {
 

@@ -1,4 +1,4 @@
-package com.github.upcraftlp.votifier.api.reward;
+package api.reward;
 
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
@@ -11,6 +11,6 @@ public abstract class Reward {
     public abstract void activate(MinecraftServer server, EntityPlayer player, long timestamp, String service, String address);
 
     public static String replace(String input, ICommandSender entity, String service) {
-        return input.replace("@PLAYER@", entity.getDisplayName().getUnformattedText()).replace("@SERVICE@", service);
+        return input.replace("@PLAYER@", entity.getCommandSenderName()).replace("@SERVICE@", service);
     }
 }

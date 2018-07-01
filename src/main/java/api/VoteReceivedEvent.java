@@ -1,4 +1,4 @@
-package com.github.upcraftlp.votifier.api;
+package api;
 
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.event.entity.player.PlayerEvent;

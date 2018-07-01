@@ -1,4 +1,4 @@
-package com.github.upcraftlp.votifier.api;
+package api;
 
 public interface IRewardStore {
 

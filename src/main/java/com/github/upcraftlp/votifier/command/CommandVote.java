@@ -1,6 +1,6 @@
 package com.github.upcraftlp.votifier.command;
 
-import com.github.upcraftlp.votifier.api.reward.Reward;
+import api.reward.Reward;
 import com.github.upcraftlp.votifier.config.VotifierConfig;
 import com.github.upcraftlp.votifier.reward.store.RewardStoreWorldSavedData;
 import net.minecraft.command.CommandBase;
@@ -10,15 +10,11 @@ import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.event.ClickEvent;
 import net.minecraft.event.HoverEvent;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.ChatComponentProcessor;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
 
-import javax.annotation.Nullable;
 import java.util.List;
 
 public class CommandVote extends CommandBase {
@@ -37,17 +33,17 @@ public class CommandVote extends CommandBase {
     public void processCommand(ICommandSender sender, String[] args) throws CommandException {
         EntityPlayerMP playerMP = getCommandSenderAsPlayer(sender);
         if(args.length == 0) {
-            playerMP.addChatComponentMessage(ChatComponentProcessor.processComponent(MinecraftServer.getServer(), IChatComponent.Serializer.jsonToComponent(Reward.replace(VotifierConfig.voteCommand, sender, "")), playerMP));
+            playerMP.addChatComponentMessage(IChatComponent.Serializer.jsonToComponent(Reward.replace(VotifierConfig.voteCommand, sender, "")));
             return;
         } else if(args.length == 1) {
             if("claim".equalsIgnoreCase(args[0])) {
                 RewardStoreWorldSavedData wsd = RewardStoreWorldSavedData.get(playerMP.getServerForPlayer());
-                if(wsd.getOutStandingRewardCount(playerMP.getDisplayNameString()) == 0) throw new CommandException("You have no outstanding rewards!");
-                else wsd.claimRewards(playerMP.getDisplayNameString());
+                if(wsd.getOutStandingRewardCount(playerMP.getDisplayName()) == 0) throw new CommandException("You have no outstanding rewards!");
+                else wsd.claimRewards(playerMP.getDisplayName());
                 return;
             }
             else if("get".equalsIgnoreCase(args[0])) {
-                int outstandingRewards = RewardStoreWorldSavedData.get(playerMP.getServerForPlayer()).getOutStandingRewardCount(playerMP.getDisplayNameString());
+                int outstandingRewards = RewardStoreWorldSavedData.get(playerMP.getServerForPlayer()).getOutStandingRewardCount(playerMP.getDisplayName());
                 if(outstandingRewards == 0) sender.addChatMessage(new ChatComponentText("You have no outstanding rewards!"));
                 else {
                     sender.addChatMessage(getOutstandingRewardsText(outstandingRewards));
@@ -70,8 +66,8 @@ public class CommandVote extends CommandBase {
     }
 
     @Override
-    public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
+    public List<String> addTabCompletionOptions(ICommandSender sender, String[] args) {
         if(args.length == 1) return getListOfStringsMatchingLastWord(args, "claim");
-        return super.addTabCompletionOptions(sender, args, targetPos);
+        return super.addTabCompletionOptions(sender, args);
     }
 }

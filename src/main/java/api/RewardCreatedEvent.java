@@ -1,9 +1,9 @@
-package com.github.upcraftlp.votifier.api;
+package api;
 
-import com.github.upcraftlp.votifier.api.reward.Reward;
+import api.reward.Reward;
 import com.google.gson.JsonObject;
+import cpw.mods.fml.common.eventhandler.Event;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.eventhandler.Event;
 
 import javax.annotation.Nullable;
 

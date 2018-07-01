@@ -1,20 +1,20 @@
 package com.github.upcraftlp.votifier.config;
 
 import com.github.upcraftlp.votifier.ForgeVotifier;
-import com.github.upcraftlp.votifier.api.RewardCreatedEvent;
-import com.github.upcraftlp.votifier.api.reward.Reward;
+import api.RewardCreatedEvent;
+import api.reward.Reward;
+import com.github.upcraftlp.votifier.event.VoteEventHandler;
 import com.github.upcraftlp.votifier.reward.RewardChat;
 import com.github.upcraftlp.votifier.reward.RewardCommand;
 import com.github.upcraftlp.votifier.reward.RewardItem;
-import com.github.upcraftlp.votifier.event.VoteEventHandler;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import net.minecraft.command.CommandBase;
 import net.minecraft.item.Item;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;

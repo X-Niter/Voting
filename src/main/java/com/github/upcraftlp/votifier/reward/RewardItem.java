@@ -1,12 +1,11 @@
 package com.github.upcraftlp.votifier.reward;
 
 import com.github.upcraftlp.votifier.ForgeVotifier;
-import com.github.upcraftlp.votifier.api.reward.Reward;
+import api.reward.Reward;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.JsonToNBT;
-import net.minecraft.nbt.NBTException;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 
@@ -33,9 +32,9 @@ public class RewardItem extends Reward {
         if(ret.hasDisplayName()) ret.setStackDisplayName(replace(ret.getDisplayName(), player, service));
         if(nbtRaw != null) {
             try {
-                NBTTagCompound nbt = JsonToNBT.getTagFromJson(replace(nbtRaw, player, service));
+                NBTTagCompound nbt = (NBTTagCompound) JsonToNBT.func_150315_a(replace(nbtRaw, player, service));
                 ret.setTagCompound(nbt);
-            } catch(NBTException e) {
+            } catch(Exception e) {
                 ForgeVotifier.getLogger().error("unable to parse NBT string: {}", nbtRaw);
             }
         }

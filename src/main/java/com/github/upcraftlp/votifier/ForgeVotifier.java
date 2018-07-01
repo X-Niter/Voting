@@ -1,23 +1,24 @@
 package com.github.upcraftlp.votifier;
 
-import com.github.upcraftlp.votifier.api.reward.RewardStore;
+import api.reward.RewardStore;
 import com.github.upcraftlp.votifier.command.CommandVote;
 import com.github.upcraftlp.votifier.config.RewardParser;
 import com.github.upcraftlp.votifier.config.VotifierConfig;
 import com.github.upcraftlp.votifier.event.VoteEventHandler;
 import com.github.upcraftlp.votifier.net.NetworkListenerThread;
 import com.github.upcraftlp.votifier.reward.store.RewardStoreWorldSavedData;
-import com.github.upcraftlp.votifier.util.ModUpdateHandler;
 import com.github.upcraftlp.votifier.util.RSAUtil;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.FMLLog;
+import cpw.mods.fml.common.Mod;
+import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.event.FMLServerStartedEvent;
+import cpw.mods.fml.common.event.FMLServerStartingEvent;
+import cpw.mods.fml.common.event.FMLServerStoppingEvent;
+import cpw.mods.fml.relauncher.ReflectionHelper;
 import net.minecraft.util.StringUtils;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLServerStartedEvent;
-import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
-import net.minecraftforge.fml.common.event.FMLServerStoppingEvent;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -31,21 +32,18 @@ import static com.github.upcraftlp.votifier.ForgeVotifier.*;
         acceptedMinecraftVersions = MCVERSIONS,
         modid = MODID,
         dependencies = DEPENDENCIES,
-        updateJSON = UPDATE_JSON,
-        serverSideOnly = true,
         acceptableRemoteVersions = "*"
 )
 public class ForgeVotifier {
 
     //Version
-    public static final String MCVERSIONS = "[1.8,1.8.9)";
+    public static final String MCVERSIONS = "1.7.10";
     public static final String VERSION = "@VERSION@";
 
     //Meta Information
     public static final String MODNAME = "Forge Votifier";
     public static final String MODID = "votifier";
     public static final String DEPENDENCIES = "";
-    public static final String UPDATE_JSON = "@UPDATE_JSON@";
 
     public static final String FINGERPRINT_KEY = "@FINGERPRINTKEY@";
     private NetworkListenerThread networkListener;
@@ -63,6 +61,10 @@ public class ForgeVotifier {
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
+        if(!event.getSide().isServer()) {
+            FMLLog.bigWarning("FORGE VOTIFIER IS SERVERSIDE ONLY, ABORTING LAUNCH!");
+            FMLCommonHandler.instance().exitJava(1, false);
+        }
         VotifierConfig.init(event);
         MinecraftForge.EVENT_BUS.register(new VoteEventHandler());
         RewardParser.init(event);
@@ -91,7 +93,6 @@ public class ForgeVotifier {
 
     @Mod.EventHandler
     public void onServerStarted(FMLServerStartedEvent event) {
-        ModUpdateHandler.notifyServer();
         ReflectionHelper.setPrivateValue(RewardStore.class, null, RewardStoreWorldSavedData.get(), "INSTANCE");
         if(isDebugMode()) log.info("server started successfully!");
     }
