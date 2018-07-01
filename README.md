@@ -11,3 +11,11 @@ All Downloads:
 
 ### Server lists known to work with this mod:
 - [MinecraftServers.biz](https://minecraftservers.biz)
+
+available for:
+- [x] 1.12.2
+- [ ] 1.11.X
+- [ ] 1.10.X/1.9.4
+- [ ] 1.8.9
+- [ ] 1.8
+- [ ] 1.7.10
