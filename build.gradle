@@ -252,7 +252,7 @@ curseforge {
             //addArtifact sourceJar
             addArtifact apiJar
 
-            addGameVersion '1.8.9'
+            addGameVersion '1.8'
 
             mainArtifact(jar) {
                 displayName = "${project.mod_name} v${project.mod_version} MC${project.mc_version}"
