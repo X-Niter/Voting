@@ -1,6 +1,6 @@
 [
 {
-  "modid": "${modid}",
+  "modid": "votifier",
   "name": "${name}",
   "description": "${description}",
   "version": "${version}",

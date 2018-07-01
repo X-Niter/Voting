@@ -33,11 +33,11 @@ public class RewardChat extends Reward {
             try {
                 ITextComponent textComponent = ITextComponent.Serializer.jsonToComponent(msg);
                 if(this.broadcastMessage) {
-                    for(EntityPlayerMP playerMP : server.getPlayerList().getPlayers()) {
-                        playerMP.sendMessage(TextComponentUtils.processComponent(server, textComponent, playerMP));
+                    for(EntityPlayerMP playerMP : server.getPlayerList().getPlayerList()) {
+                        playerMP.addChatComponentMessage(TextComponentUtils.processComponent(server, textComponent, playerMP));
                     }
                 }
-                else player.sendMessage(TextComponentUtils.processComponent(server, textComponent, player));
+                else player.addChatComponentMessage(TextComponentUtils.processComponent(server, textComponent, player));
             }
             catch(Exception e) {
                 ForgeVotifier.getLogger().error("error parsing chat reward!", e);
@@ -47,8 +47,8 @@ public class RewardChat extends Reward {
             String[] messages = msg.split("\n");
             for(String messageString : messages) {
                 ITextComponent textComponent = new TextComponentString(messageString);
-                if(this.broadcastMessage) server.getPlayerList().sendMessage(textComponent);
-                else player.sendMessage(textComponent);
+                if(this.broadcastMessage) server.getPlayerList().sendChatMsg(textComponent);
+                else player.addChatComponentMessage(textComponent);
             }
         }
     }

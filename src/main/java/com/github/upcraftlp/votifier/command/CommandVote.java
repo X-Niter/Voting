@@ -24,12 +24,12 @@ import java.util.List;
 public class CommandVote extends CommandBase {
 
     @Override
-    public String getName() {
+    public String getCommandName() {
         return "vote";
     }
 
     @Override
-    public String getUsage(ICommandSender sender) {
+    public String getCommandUsage(ICommandSender sender) {
         return "/vote [claim|get]";
     }
 
@@ -37,7 +37,7 @@ public class CommandVote extends CommandBase {
     public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
         EntityPlayerMP playerMP = getCommandSenderAsPlayer(sender);
         if(args.length == 0) {
-            playerMP.sendMessage(TextComponentUtils.processComponent(server, ITextComponent.Serializer.jsonToComponent(Reward.replace(VotifierConfig.voteCommand, sender, "")), playerMP));
+            playerMP.addChatComponentMessage(TextComponentUtils.processComponent(server, ITextComponent.Serializer.jsonToComponent(Reward.replace(VotifierConfig.voteCommand, sender, "")), playerMP));
             return;
         } else if(args.length == 1) {
             if("claim".equalsIgnoreCase(args[0])) {
@@ -48,14 +48,14 @@ public class CommandVote extends CommandBase {
             }
             else if("get".equalsIgnoreCase(args[0])) {
                 int outstandingRewards = RewardStoreWorldSavedData.get(playerMP.getServerWorld()).getOutStandingRewardCount(playerMP.getName());
-                if(outstandingRewards == 0) sender.sendMessage(new TextComponentString("You have no outstanding rewards!"));
+                if(outstandingRewards == 0) sender.addChatMessage(new TextComponentString("You have no outstanding rewards!"));
                 else {
-                    sender.sendMessage(getOutstandingRewardsText(outstandingRewards));
+                    sender.addChatMessage(getOutstandingRewardsText(outstandingRewards));
                 }
                 return;
             }
         }
-        throw new WrongUsageException(getUsage(sender));
+        throw new WrongUsageException(this.getCommandUsage(sender));
     }
 
     public static ITextComponent getOutstandingRewardsText(int rewardsOutstanding) {
@@ -70,8 +70,8 @@ public class CommandVote extends CommandBase {
     }
 
     @Override
-    public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
+    public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
         if(args.length == 1) return getListOfStringsMatchingLastWord(args, "claim");
-        return super.getTabCompletions(server, sender, args, targetPos);
+        return super.getTabCompletionOptions(server, sender, args, targetPos);
     }
 }

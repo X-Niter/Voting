@@ -4,11 +4,13 @@ import com.github.upcraftlp.votifier.api.reward.RewardStore;
 import com.github.upcraftlp.votifier.command.CommandVote;
 import com.github.upcraftlp.votifier.config.RewardParser;
 import com.github.upcraftlp.votifier.config.VotifierConfig;
+import com.github.upcraftlp.votifier.event.VoteEventHandler;
 import com.github.upcraftlp.votifier.net.NetworkListenerThread;
 import com.github.upcraftlp.votifier.reward.store.RewardStoreWorldSavedData;
 import com.github.upcraftlp.votifier.util.ModUpdateHandler;
 import com.github.upcraftlp.votifier.util.RSAUtil;
 import net.minecraft.util.StringUtils;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -36,7 +38,7 @@ import static com.github.upcraftlp.votifier.ForgeVotifier.*;
 public class ForgeVotifier {
 
     //Version
-    public static final String MCVERSIONS = "[1.11,1.11.2]";
+    public static final String MCVERSIONS = "[1.9.4,1.10.2]";
     public static final String VERSION = "@VERSION@";
 
     //Meta Information
@@ -61,6 +63,8 @@ public class ForgeVotifier {
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
+        VotifierConfig.init(event);
+        MinecraftForge.EVENT_BUS.register(new VoteEventHandler());
         RewardParser.init(event);
         if(isDebugMode()) log.info("initiated vote listeners!");
     }

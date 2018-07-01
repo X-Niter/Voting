@@ -68,7 +68,7 @@ public class NetworkListenerThread extends Thread {
                                     ForgeVotifier.getLogger().info("received vote from {} at {} from service {}", username, timestamp, service);
                                     PlayerList playerList = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList();
                                     boolean found = false;
-                                    for(String name : playerList.getOnlinePlayerNames()) {
+                                    for(String name : playerList.getAllUsernames()) {
                                         if(name.equalsIgnoreCase(username)) {
                                             EntityPlayerMP player = playerList.getPlayerByUsername(username);
                                             if(player != null) {

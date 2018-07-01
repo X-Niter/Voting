@@ -11,23 +11,20 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.common.ForgeVersion;
 import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
-import net.minecraftforge.fml.relauncher.Side;
 
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-@Mod.EventBusSubscriber(value = Side.SERVER, modid = ForgeVotifier.MODID)
 public class VoteEventHandler {
 
     private static final List<Reward> REWARDS = new LinkedList<>();
 
     @SubscribeEvent(priority = EventPriority.LOW)
-    public static void voteMade(VoteReceivedEvent event) {
+    public void voteMade(VoteReceivedEvent event) {
         Iterator<Reward> iterator = REWARDS.iterator();
         MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
         while(iterator.hasNext()) {
@@ -47,14 +44,14 @@ public class VoteEventHandler {
     }
 
     @SubscribeEvent(priority = EventPriority.LOW)
-    public static void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
+    public void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
         int rewardCount = RewardStore.getStore().getOutStandingRewardCount(event.player.getName());
-        if(rewardCount > 0) event.player.sendMessage(CommandVote.getOutstandingRewardsText(rewardCount));
+        if(rewardCount > 0) event.player.addChatComponentMessage(CommandVote.getOutstandingRewardsText(rewardCount));
         MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
-        if(VotifierConfig.updates.enableUpdateChecker && server.getPlayerList().getOppedPlayers().getPermissionLevel(event.player.getGameProfile()) == server.getOpPermissionLevel()) { //player is opped
+        if(VotifierConfig.enableUpdateChecker && server.getPlayerList().getOppedPlayers().getPermissionLevel(event.player.getGameProfile()) == server.getOpPermissionLevel()) { //player is opped
             ForgeVersion.CheckResult result = ModUpdateHandler.getResult();
-            if(VotifierConfig.updates.enableUpdateChecker && ModUpdateHandler.hasUpdate(result)) {
-                event.player.sendMessage(new TextComponentString("There's an update available for " + ForgeVotifier.MODNAME + ", check the server log for details!"));
+            if(VotifierConfig.enableUpdateChecker && ModUpdateHandler.hasUpdate(result)) {
+                event.player.addChatComponentMessage(new TextComponentString("There's an update available for " + ForgeVotifier.MODNAME + ", check the server log for details!"));
             }
         }
     }

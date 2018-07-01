@@ -14,7 +14,7 @@ public class ModUpdateHandler {
             ForgeVotifier.getLogger().warn("Error getting update status for {}, found status {}!", ForgeVotifier.MODNAME, status.toString());
             return false;
         }
-        else return status == ForgeVersion.Status.OUTDATED || (VotifierConfig.updates.showBetaUpdates && status == ForgeVersion.Status.BETA_OUTDATED);
+        else return status == ForgeVersion.Status.OUTDATED || (VotifierConfig.showBetaUpdates && status == ForgeVersion.Status.BETA_OUTDATED);
     }
 
     public static ForgeVersion.CheckResult getResult() {
