@@ -11,7 +11,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.1-SNAPSHOT'
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.0-SNAPSHOT'
 		classpath 'com.matthewprenger:CurseGradle:1.0-SNAPSHOT'
     }
 }
@@ -70,7 +70,7 @@ repositories {
 }
 
 minecraft {
-    version = "${project.mc_version}-${project.forge_version}-${project.mc_version}"
+    version = "${project.mc_version}-${project.forge_version}"
     if(project.hasProperty('runDir')) {
         runDir = project.runDir
     }
