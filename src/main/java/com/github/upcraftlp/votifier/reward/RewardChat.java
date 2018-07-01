@@ -9,6 +9,8 @@ import net.minecraft.util.ChatComponentProcessor;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.IChatComponent;
 
+import java.util.List;
+
 public class RewardChat extends Reward {
 
     private final boolean broadcastMessage;
@@ -26,6 +28,7 @@ public class RewardChat extends Reward {
         return "chat";
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void activate(MinecraftServer server, EntityPlayer player, long timestamp, String service, String address) {
         String msg = replace(messageRaw, player, service);
@@ -33,7 +36,7 @@ public class RewardChat extends Reward {
             try {
                 IChatComponent textComponent = IChatComponent.Serializer.jsonToComponent(msg);
                 if(this.broadcastMessage) {
-                    for(EntityPlayerMP playerMP : server.getConfigurationManager().getPlayerList()) {
+                    for(EntityPlayerMP playerMP : (List<EntityPlayerMP>) server.getConfigurationManager().playerEntityList) {
                         playerMP.addChatComponentMessage(ChatComponentProcessor.processComponent(server, textComponent, playerMP));
                     }
                 }

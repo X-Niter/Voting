@@ -42,12 +42,12 @@ public class CommandVote extends CommandBase {
         } else if(args.length == 1) {
             if("claim".equalsIgnoreCase(args[0])) {
                 RewardStoreWorldSavedData wsd = RewardStoreWorldSavedData.get(playerMP.getServerForPlayer());
-                if(wsd.getOutStandingRewardCount(playerMP.getName()) == 0) throw new CommandException("You have no outstanding rewards!");
-                else wsd.claimRewards(playerMP.getName());
+                if(wsd.getOutStandingRewardCount(playerMP.getDisplayNameString()) == 0) throw new CommandException("You have no outstanding rewards!");
+                else wsd.claimRewards(playerMP.getDisplayNameString());
                 return;
             }
             else if("get".equalsIgnoreCase(args[0])) {
-                int outstandingRewards = RewardStoreWorldSavedData.get(playerMP.getServerForPlayer()).getOutStandingRewardCount(playerMP.getName());
+                int outstandingRewards = RewardStoreWorldSavedData.get(playerMP.getServerForPlayer()).getOutStandingRewardCount(playerMP.getDisplayNameString());
                 if(outstandingRewards == 0) sender.addChatMessage(new ChatComponentText("You have no outstanding rewards!"));
                 else {
                     sender.addChatMessage(getOutstandingRewardsText(outstandingRewards));

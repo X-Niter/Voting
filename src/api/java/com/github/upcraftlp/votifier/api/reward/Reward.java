@@ -11,6 +11,6 @@ public abstract class Reward {
     public abstract void activate(MinecraftServer server, EntityPlayer player, long timestamp, String service, String address);
 
     public static String replace(String input, ICommandSender entity, String service) {
-        return input.replace("@PLAYER@", entity.getName()).replace("@SERVICE@", service);
+        return input.replace("@PLAYER@", entity.getDisplayName().getUnformattedText()).replace("@SERVICE@", service);
     }
 }

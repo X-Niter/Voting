@@ -45,7 +45,7 @@ public class VoteEventHandler {
 
     @SubscribeEvent(priority = EventPriority.LOW)
     public void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
-        int rewardCount = RewardStore.getStore().getOutStandingRewardCount(event.player.getName());
+        int rewardCount = RewardStore.getStore().getOutStandingRewardCount(event.player.getDisplayNameString());
         if(rewardCount > 0) event.player.addChatComponentMessage(CommandVote.getOutstandingRewardsText(rewardCount));
         MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
         if(VotifierConfig.enableUpdateChecker && server.getConfigurationManager().canSendCommands(event.player.getGameProfile())) { //player is opped
