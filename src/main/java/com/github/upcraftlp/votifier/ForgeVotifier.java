@@ -39,7 +39,7 @@ import static com.github.upcraftlp.votifier.ForgeVotifier.*;
 public class ForgeVotifier {
 
     //Version
-    public static final String MCVERSIONS = "[1.12.2, 1.13)";
+    public static final String MCVERSIONS = "[1.11,1.11.2]";
     public static final String VERSION = "@VERSION@";
 
     //Meta Information

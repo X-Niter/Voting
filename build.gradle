@@ -11,7 +11,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
 		classpath 'com.matthewprenger:CurseGradle:1.0-SNAPSHOT'
     }
 }
@@ -207,8 +207,7 @@ if (JavaVersion.current().isJava8Compatible()) {
 }
 
 dependencies {
-
-    deobfCompile "craftdev-core:craftdev-core:${project.mc_version}:${project.core_version}"
+    //none
 }
 tasks.build.dependsOn signJar, signApiJar, signJavadocJar, publish
 tasks.curseforge.dependsOn build
@@ -234,7 +233,6 @@ publishing {
 
 def curseRelations = {
     //requiredLibrary '' //add curseforge-slug here
-    optionalLibrary 'craftdev-core'
 }
 
 
