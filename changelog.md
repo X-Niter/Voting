@@ -2,7 +2,7 @@
 Version 1.1.2
 ------------------------------------------------------
 - added support for item damage
-- 1.7.10: fixed default rewards file not being generated
+- 1.7.10-1.10.2: fixed default rewards file not being generated
 
 ------------------------------------------------------
 Version 1.1.1

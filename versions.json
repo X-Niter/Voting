@@ -1,20 +1,20 @@
 {
     "homepage": "https://minecraft.curseforge.com/projects/293830",
     "promos": {
-        "1.12.2-latest": "1.1.1",
-        "1.12.2-recommended": "1.1.1",
-        "1.11.2-latest": "1.1.1",
-        "1.11.2-recommended": "1.1.1",
-        "1.10.2-latest": "1.1.1",
-        "1.10.2-recommended": "1.1.1",
-        "1.9.4-latest": "1.1.1",
-        "1.9.4-recommended": "1.1.1",
-        "1.8.9-latest": "1.1.1",
-        "1.8.9-recommended": "1.1.1",
-        "1.8-latest": "1.1.1"
+        "1.12.2-latest": "1.1.2",
+        "1.12.2-recommended": "1.1.2",
+        "1.11.2-latest": "1.1.2",
+        "1.11.2-recommended": "1.1.2",
+        "1.10.2-latest": "1.1.2",
+        "1.10.2-recommended": "1.1.2",
+        "1.9.4-latest": "1.1.2",
+        "1.9.4-recommended": "1.1.2",
+        "1.8.9-latest": "1.1.2",
+        "1.8.9-recommended": "1.1.2",
+        "1.8-latest": "1.1.2"
     },
     "1.8": {
-        "1.1.2": "* added support for item metadata",
+        "1.1.2": "* added support for item metadata\n* 1.7.10-1.10.2: fixed default rewards file not being generated properly",
         "1.1.1": "* NPE fix",
         "1.1.0": "* offline rewards can now be stored\n* fixed tellraw text parsing",
         "1.0.0": "* initial release"

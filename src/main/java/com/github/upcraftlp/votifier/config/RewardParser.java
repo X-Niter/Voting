@@ -85,7 +85,7 @@ public class RewardParser {
     private static void setupDefaultRewards(File rewardsDir) {
         File defaultConfig = new File(rewardsDir, "default_rewards.json");
         try {
-            FileUtils.forceMkdirParent(defaultConfig);
+            FileUtils.forceMkdir(rewardsDir);
             FileUtils.copyToFile(MinecraftServer.class.getClassLoader().getResourceAsStream("assets/" + ForgeVotifier.MODID +"/reward/default_rewards.json"), defaultConfig);
         } catch(IOException e) {
             ForgeVotifier.getLogger().error("Exception setting up the default reward config!", e);
