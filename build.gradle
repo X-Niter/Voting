@@ -255,9 +255,9 @@ curseforge {
             //addArtifact sourceJar
             addArtifact apiJar
 
-            //addGameVersion '1.12'
-            //addGameVersion '1.12.1'
-            //addGameVersion '1.12.2'
+            addGameVersion '1.12'
+            addGameVersion '1.12.1'
+            addGameVersion '1.12.2'
 
             mainArtifact(jar) {
                 displayName = "${project.mod_name} v${project.mod_version} MC${project.mc_version}"
