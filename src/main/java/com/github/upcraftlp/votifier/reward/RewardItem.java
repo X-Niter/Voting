@@ -17,7 +17,11 @@ public class RewardItem extends Reward {
     private final String nbtRaw;
 
     public RewardItem(Item item, int count, @Nullable String nbtString) {
-        itemStack = new ItemStack(item, count);
+        this(item, count, 0, nbtString);
+    }
+
+    public RewardItem(Item item, int count, int meta, @Nullable String nbtString) {
+        itemStack = new ItemStack(item, count, meta);
         nbtRaw = nbtString;
     }
 
