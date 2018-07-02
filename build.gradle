@@ -12,8 +12,11 @@ buildscript {
     }
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
-		classpath 'com.matthewprenger:CurseGradle:1.0-SNAPSHOT'
     }
+}
+
+plugins {
+    id 'com.matthewprenger.cursegradle' version '1.0.10'
 }
 
 apply plugin: 'net.minecraftforge.gradle.forge'
