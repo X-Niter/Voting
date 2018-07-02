@@ -58,9 +58,10 @@ public class RewardParser {
                             break;
                         case "item":
                             Item item = CommandBase.getItemByText(null, object.get("name").getAsString());
-                            int count = object.get("count").getAsInt();
+                            int count = object.has("count") ? object.get("count").getAsInt() : 1;
+                            int meta = object.has("damage") ? object.get("damage").getAsInt() : 0;
                             String nbtRaw = object.has("nbt") ? object.get("nbt").getAsString() : null;
-                            reward = new RewardItem(item, count, nbtRaw);
+                            reward = new RewardItem(item, count, meta, nbtRaw);
                             break;
                         default: //allow for custom rewards from other mods
                             RewardCreatedEvent rewardEvent = new RewardCreatedEvent(type, object);
