@@ -7,6 +7,12 @@
             "nbt": "{display:{Name:\"Reward\",Lore:[\"Hello @PLAYER@,\",\"This is your\",\"voting reward from\",\"@SERVICE@\"]}}"
         },
         {
+            "type": "item",
+            "name": "minecraft:dye",
+            "count": 16,
+            "damage": 15
+        },
+        {
             "type": "command",
             "command": "gamemode 1 @PLAYER@"
         },
