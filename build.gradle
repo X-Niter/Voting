@@ -211,7 +211,7 @@ if (JavaVersion.current().isJava8Compatible()) {
 
 dependencies {
 
-    deobfCompile "craftdev-core:craftdev-core:${project.mc_version}:${project.core_version}"
+    deobfProvided "com.github.Glasspane:Glasspane:${project.gp_version}"
 }
 tasks.build.dependsOn signJar, signApiJar, signJavadocJar, publish
 tasks.curseforge.dependsOn build
