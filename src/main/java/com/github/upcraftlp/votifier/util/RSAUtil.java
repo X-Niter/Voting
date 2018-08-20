@@ -1,7 +1,6 @@
 package com.github.upcraftlp.votifier.util;
 
 import com.github.upcraftlp.votifier.ForgeVotifier;
-import com.google.common.io.Files;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import org.apache.commons.io.FileUtils;
 
@@ -82,8 +81,8 @@ public class RSAUtil {
             pubKeyFile.createNewFile();
             privKeyFile.createNewFile();
 
-            Files.write(DatatypeConverter.printBase64Binary(new X509EncodedKeySpec(keyPair.getPublic().getEncoded()).getEncoded()).getBytes(), pubKeyFile);
-            Files.write(DatatypeConverter.printBase64Binary(new PKCS8EncodedKeySpec(keyPair.getPrivate().getEncoded()).getEncoded()).getBytes(), privKeyFile);
+            FileUtils.writeByteArrayToFile(pubKeyFile, DatatypeConverter.printBase64Binary(new X509EncodedKeySpec(keyPair.getPublic().getEncoded()).getEncoded()).getBytes());
+            FileUtils.writeByteArrayToFile(privKeyFile, DatatypeConverter.printBase64Binary(new PKCS8EncodedKeySpec(keyPair.getPrivate().getEncoded()).getEncoded()).getBytes());
             ForgeVotifier.getLogger().info("successfully saved new RSA keypair to \"{}\"", directory.getAbsolutePath());
         }
         catch(Exception e) {
@@ -99,7 +98,7 @@ public class RSAUtil {
             KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA");
             keyGen.initialize(spec);
             KeyPair ret = keyGen.generateKeyPair();
-            ForgeVotifier.getLogger().info("Successfully generated new RSA keypair!\nPublic Key:\n{}", DatatypeConverter.printBase64Binary(new X509EncodedKeySpec(ret.getPublic().getEncoded()).getEncoded()));
+            ForgeVotifier.getLogger().info("Successfully generated new RSA keypair!");
             return ret;
         }
         catch(Exception e) {

@@ -46,7 +46,7 @@ public class NetworkListenerThread extends Thread {
                         byte[] bytes = new byte[256];
                         inputStream.read(bytes, 0, bytes.length);
                         String[] lines = new String(RSAUtil.decrypt(bytes, RSAUtil.getKeyPair().getPrivate())).split("\n");
-                        if(lines.length < 5) {
+                        if(lines.length < 4) {
                             error(lines);
                         } else {
                             String opcode = lines[0].trim();
@@ -54,24 +54,13 @@ public class NetworkListenerThread extends Thread {
                                 String service = lines[1].trim();
                                 String username = lines[2].trim();
                                 String address = lines[3].trim();
-                                String timestamp = lines[4].trim();
+                                String timestamp = lines.length >= 5 ? lines[4].trim() : Long.toString(System.nanoTime() / 1000000L);
                                 FMLCommonHandler.instance().getMinecraftServerInstance().addScheduledTask(() -> { //ensure we are not handling the event on the network thread
                                     ForgeVotifier.getLogger().info("[{}] received vote from {} (service: {})", timestamp, username, service);
                                     PlayerList playerList = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList();
-                                    boolean found = false;
-                                    for(String name : playerList.getOnlinePlayerNames()) {
-                                        if(name.equalsIgnoreCase(username)) {
-                                            EntityPlayerMP player = playerList.getPlayerByUsername(username);
-                                            if(player != null) {
-                                                MinecraftForge.EVENT_BUS.post(new VoteReceivedEvent(player, service, address, timestamp));
-                                                found = true;
-                                                break;
-                                            }
-                                        }
-                                    }
-                                    if(!found) {
-                                        RewardStore.getStore().storePlayerReward(username, service, address, timestamp);
-                                    }
+                                    EntityPlayerMP player = playerList.getPlayerByUsername(username);
+                                    if(player != null) MinecraftForge.EVENT_BUS.post(new VoteReceivedEvent(player, service, address, timestamp));
+                                    else RewardStore.getStore().storePlayerReward(username, service, address, timestamp);
                                 });
                             } else {
                                 error(lines);
