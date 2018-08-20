@@ -211,7 +211,7 @@ if (JavaVersion.current().isJava8Compatible()) {
 
 dependencies {
 
-    deobfProvided "com.github.Glasspane:Glasspane:${project.gp_version}"
+    //deobfProvided "com.github.Glasspane:Glasspane:${project.gp_version}"
 }
 tasks.build.dependsOn signJar, signApiJar, signJavadocJar, publish
 tasks.curseforge.dependsOn build

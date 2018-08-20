@@ -8,8 +8,6 @@ import com.github.upcraftlp.votifier.net.NetworkListenerThread;
 import com.github.upcraftlp.votifier.reward.store.RewardStoreWorldSavedData;
 import com.github.upcraftlp.votifier.util.ModUpdateHandler;
 import com.github.upcraftlp.votifier.util.RSAUtil;
-import core.upcraftlp.craftdev.api.util.ModHelper;
-import core.upcraftlp.craftdev.api.util.UpdateChecker;
 import net.minecraft.util.StringUtils;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
@@ -71,10 +69,11 @@ public class ForgeVotifier {
     public void preInit(FMLPreInitializationEvent event) {
         CORE_LOADED = Loader.isModLoaded("craftdev-core");
         if(VotifierConfig.updates.enableUpdateChecker) {
-            if(isCoreLoaded()) {
-                UpdateChecker.registerMod(MODID);
-                debugMode = ModHelper.isDebugMode();
-            }
+            //FIXME switch to glasspane
+            //if(isCoreLoaded()) {
+            //    UpdateChecker.registerMod(MODID);
+            //    debugMode = ModHelper.isDebugMode();
+            //}
         }
         RewardParser.init(event);
         if(isDebugMode()) log.info("initiated vote listeners!");
