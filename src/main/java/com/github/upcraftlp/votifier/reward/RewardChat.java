@@ -27,7 +27,7 @@ public class RewardChat extends Reward {
     }
 
     @Override
-    public void activate(MinecraftServer server, EntityPlayer player, long timestamp, String service, String address) {
+    public void activate(MinecraftServer server, EntityPlayer player, String timestamp, String service, String address) {
         String msg = replace(messageRaw, player, service);
         if(this.parseAsTellraw) {
             try {

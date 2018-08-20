@@ -2,12 +2,12 @@ package com.github.upcraftlp.votifier.api;
 
 public interface IRewardStore {
 
-    public abstract int getOutStandingRewardCount(String playerNmae);
+    int getOutStandingRewardCount(String playerNmae);
 
-    public abstract int getMaxStoredRewards();
+    int getMaxStoredRewards();
 
-    public abstract void storePlayerReward(String name, String service, String address, long timestamp);
+    void storePlayerReward(String name, String service, String address, String timestamp);
 
-    public abstract void claimRewards(String name);
+    void claimRewards(String name);
 
 }

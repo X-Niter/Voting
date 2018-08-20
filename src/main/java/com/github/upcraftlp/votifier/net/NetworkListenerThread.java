@@ -15,7 +15,6 @@ import java.io.OutputStreamWriter;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 public class NetworkListenerThread extends Thread {
@@ -55,17 +54,9 @@ public class NetworkListenerThread extends Thread {
                                 String service = lines[1].trim();
                                 String username = lines[2].trim();
                                 String address = lines[3].trim();
-                                String timestampString = lines[4].trim();
-                                long timestamp;
-                                try {
-                                    timestamp = DATE_FORMAT.parse(timestampString).getTime();
-                                } catch(ParseException e) {
-                                    error(lines);
-                                    ForgeVotifier.getLogger().error("invalid vote timestamp!", e);
-                                    continue; //timestamp is invalid
-                                }
+                                String timestamp = lines[4].trim();
                                 FMLCommonHandler.instance().getMinecraftServerInstance().addScheduledTask(() -> { //ensure we are not handling the event on the network thread
-                                    ForgeVotifier.getLogger().info("received vote from {} at {} from service {}", username, timestamp, service);
+                                    ForgeVotifier.getLogger().info("[{}] received vote from {} (service: {})", timestamp, username, service);
                                     PlayerList playerList = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList();
                                     boolean found = false;
                                     for(String name : playerList.getOnlinePlayerNames()) {

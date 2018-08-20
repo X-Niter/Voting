@@ -18,7 +18,7 @@ public class RewardCommand extends Reward {
     }
 
     @Override
-    public void activate(MinecraftServer server, EntityPlayer player, long timestamp, String service, String address) {
+    public void activate(MinecraftServer server, EntityPlayer player, String timestamp, String service, String address) {
         server.commandManager.executeCommand(server, replace(this.command, player, service));
     }
 }
