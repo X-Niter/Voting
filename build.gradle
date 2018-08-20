@@ -37,6 +37,7 @@ else if(project.hasProperty('dev_username')) {
 }
 
 def buildVersion = project.mod_version + ext.buildName
+def buildTime = System.currentTimeMillis()
 version = "${project.mc_version}-" + buildVersion
 group = project.maven_group // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 //noinspection GroovyUnusedAssignment
@@ -129,7 +130,8 @@ task apiJar(type: Jar) {
             "Built-On-Java": "${System.getProperty('java.vm.version')} + (${System.getProperty('java.vm.vendor')})",
             "Implementation-Title": project.name + '-api',
             "Implementation-Version": project.version,
-            "Maven-Artifact":"${project.group}:${project.archivesBaseName}:${project.version}:api",
+            "Maven-Artifact":"${project.group}:${project.mavevArtifact}:${project.version}:api",
+            "Timestamp": buildTime,
             "Built-On": "${mc_version}-${forge_version}"
     )
     classifier = 'api'
@@ -145,7 +147,8 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
             "Built-On-Java": "${System.getProperty('java.vm.version')} + (${System.getProperty('java.vm.vendor')})",
             "Implementation-Title": project.name + '-javadoc',
             "Implementation-Version": project.version,
-            "Maven-Artifact":"${project.group}:${project.archivesBaseName}:${project.version}:javadoc",
+            "Maven-Artifact":"${project.group}:${project.mavevArtifact}:${project.version}:javadoc",
+            "Timestamp": buildTime,
             "Built-On": "${mc_version}-${forge_version}"
     )
     classifier = 'javadoc'
@@ -157,7 +160,9 @@ jar {
     manifest.mainAttributes(
             "Implementation-Title": project.name,
             "Implementation-Version": "${project.mod_version}",
-            "Built-On": "${project.mc_version}-${project.forge_version}"
+            "Built-On": "${project.mc_version}-${project.forge_version}",
+            "Maven-Artifact":"${project.group}:${project.mavevArtifact}:${project.version}",
+            "Timestamp": buildTime,
             //"FMLAT": "${project.modid}_at.cfg"
     )
 }
@@ -237,7 +242,7 @@ publishing {
 
 def curseRelations = {
     //requiredLibrary '' //add curseforge-slug here
-    optionalLibrary 'craftdev-core'
+    //optionalLibrary 'craftdev-core'
 }
 
 
@@ -252,7 +257,7 @@ curseforge {
             changelog = "${project.ext.changeLog}"
             releaseType = project.release_type
 
-            relations curseRelations
+            //relations curseRelations
 
             addArtifact javadocJar
             //addArtifact sourceJar
