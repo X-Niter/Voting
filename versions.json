@@ -1,8 +1,8 @@
 {
     "homepage": "https://minecraft.curseforge.com/projects/293830",
     "promos": {
-        "1.12.2-latest": "1.1.2",
-        "1.12.2-recommended": "1.1.2",
+        "1.12.2-latest": "1.2",
+        "1.12.2-recommended": "1.2",
         "1.11.2-latest": "1.1.2",
         "1.11.2-recommended": "1.1.2",
         "1.10.2-latest": "1.1.2",
@@ -12,6 +12,9 @@
         "1.8.9-latest": "1.1.2",
         "1.8.9-recommended": "1.1.2",
         "1.8-latest": "1.1.2"
+    },
+    "1.12.2": {
+        "1.2.0": "* no more backporting!\n* added support for openjdk not writing to files properly"
     },
     "1.8": {
         "1.1.2": "* added support for item metadata\n* 1.7.10-1.10.2: fixed default rewards file not being generated properly",
