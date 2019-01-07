@@ -3,19 +3,11 @@ package com.github.upcraftlp.votifier.command;
 import com.github.upcraftlp.votifier.api.reward.Reward;
 import com.github.upcraftlp.votifier.config.VotifierConfig;
 import com.github.upcraftlp.votifier.reward.store.RewardStoreWorldSavedData;
-import net.minecraft.command.CommandBase;
-import net.minecraft.command.CommandException;
-import net.minecraft.command.ICommandSender;
-import net.minecraft.command.WrongUsageException;
+import net.minecraft.command.*;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextComponentUtils;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.event.ClickEvent;
-import net.minecraft.util.text.event.HoverEvent;
+import net.minecraft.util.text.*;
+import net.minecraft.util.text.event.*;
 
 public class CommandVote extends CommandBase {
 
