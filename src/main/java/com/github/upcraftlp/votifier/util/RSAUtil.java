@@ -83,7 +83,7 @@ public class RSAUtil {
 
             FileUtils.writeByteArrayToFile(pubKeyFile, DatatypeConverter.printBase64Binary(new X509EncodedKeySpec(keyPair.getPublic().getEncoded()).getEncoded()).getBytes());
             FileUtils.writeByteArrayToFile(privKeyFile, DatatypeConverter.printBase64Binary(new PKCS8EncodedKeySpec(keyPair.getPrivate().getEncoded()).getEncoded()).getBytes());
-            ForgeVotifier.getLogger().info("successfully saved new RSA keypair to \"{}\"", directory.getAbsolutePath());
+            if(ForgeVotifier.isDebugMode()) ForgeVotifier.getLogger().info("successfully saved new RSA keypair to \"{}\"", directory.getAbsolutePath());
         }
         catch(Exception e) {
             ForgeVotifier.getLogger().error("Exception storing RSA keypair!", e);
@@ -99,6 +99,7 @@ public class RSAUtil {
             keyGen.initialize(spec);
             KeyPair ret = keyGen.generateKeyPair();
             ForgeVotifier.getLogger().info("Successfully generated new RSA keypair!");
+            if(ForgeVotifier.isDebugMode()) ForgeVotifier.getLogger().info("public key: {}", new String(ret.getPublic().getEncoded()));
             return ret;
         }
         catch(Exception e) {

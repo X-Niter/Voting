@@ -39,6 +39,10 @@ public class VotifierConfig {
     @Config.Comment({"How many rewards a player can receive while offline, must be claimed via \"/vote claim\"", "set to 0 to disable"})
     public static int maxOfflineRewards = 5;
 
+    @Config.Name("debug mode")
+    @Config.Comment("enable more verbose output of what's going on")
+    public static boolean debugMode = false;
+
     @Config.RequiresMcRestart
     @Config.Name("Update-Checker")
     @Config.Comment({"configure the update checker"})

@@ -51,14 +51,13 @@ public class ForgeVotifier {
     private NetworkListenerThread networkListener;
 
     private static final Logger log = LogManager.getLogger(MODID);
-    private static boolean debugMode = false;
 
     public static Logger getLogger() {
         return log;
     }
 
     public static boolean isDebugMode() {
-        return debugMode;
+        return VotifierConfig.debugMode;
     }
 
     public static boolean isCoreLoaded() {
