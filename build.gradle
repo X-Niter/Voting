@@ -16,14 +16,13 @@ buildscript {
 }
 
 plugins {
-    id 'com.matthewprenger.cursegradle' version '1.0.11'
+    id 'com.matthewprenger.cursegradle' version '1.1.2'
+    id 'maven-publish'
 }
 
 apply plugin: 'net.minecraftforge.gradle.forge'
-apply plugin: 'com.matthewprenger.cursegradle'
-apply plugin: 'maven-publish'
 
-apply from: 'https://gist.githubusercontent.com/UpcraftLP/0a98a7dfe913bd3e99073efa7ad0353b/raw'
+apply from: 'https://gist.githubusercontent.com/UpcraftLP/0a98a7dfe913bd3e99073efa7ad0353b/raw/mod_script.gradle'
 //Only edit below this line, the above code adds and enables the nessasary things for Forge to be setup.
 import java.time.Year
 
@@ -31,13 +30,14 @@ import java.time.Year
 def username = "${modid}"
 if (project.hasProperty('dev_mail')) {
     username = "${dev_mail}"
-}
-else if(project.hasProperty('dev_username')) {
+} else if (project.hasProperty('dev_username')) {
     username = "${dev_username}"
 }
 
+def artifactID = project.hasProperty('maven-artifact') ? findProperty('maven_artifact') : project.archivesBaseName
+def buildTimeStamp = new Date().getTime()
+
 def buildVersion = project.mod_version + ext.buildName
-def buildTime = System.currentTimeMillis()
 version = "${project.mc_version}-" + buildVersion
 group = project.maven_group // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 //noinspection GroovyUnusedAssignment
@@ -50,9 +50,10 @@ compileJava {
 }
 
 repositories {
+
     maven {
         //JEI files
-        //Mantle
+        name = "DVS1 Maven FS"
         url = "http://dvs1.progwml6.com/files/maven"
     }
     maven {
@@ -62,46 +63,58 @@ repositories {
     }
 
     maven {
+        //hwyla
+        name = "TehNut"
+        url = "https://tehnut.info/maven"
+    }
+
+    //local maven, if present
+    mavenLocal()
+
+    maven {
         //fallback for almost everything, this is CurseForge :P
         name = "CurseForge"
-        url = "https://minecraft.curseforge.com/api/maven/"
+        url = "https://minecraft.curseforge.com/api/maven"
     }
 
     maven {
+        //get dependencies from github
         name = "JitPack"
         url = "https://jitpack.io"
     }
+
 }
 
 minecraft {
     version = "${project.mc_version}-${project.forge_version}"
-    if(project.hasProperty('runDir')) {
+    if (project.hasProperty('runDir')) {
         runDir = project.runDir
+    } else if (file('../run').exists()) {
+        runDir = "../run"
+    } else {
+        runDir = "run"
     }
-    else if(file('../run').exists()) {
-		runDir = "../run"
-	}
-	else
-	{
-		runDir = "run"
-	}
-    
+
     mappings = project.forge_mappings
+    if ("${mappings}" != "${project.ext.mappings}" && "${mappings}".startsWith("snapshot_")) {
+        println(String.format("You are on old mappings, latest mappings are %s (you are on %s)", project.ext.mappings, mappings))
+    }
     makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
-	
-	replace "@VERSION@", project.mod_version
+
+    replace "@VERSION@", project.mod_version
     def fingerPrintKey = project.hasProperty('public_key') ? findProperty('public_key').replace(":", "").toLowerCase(Locale.ROOT) : "undefined"
     replace "@FINGERPRINTKEY@", fingerPrintKey
     replace "@UPDATE_JSON@", project.update_json
-    replaceIn project.reference_class
+    replace "required-after:forge", "required-after:forge@[" + project.forge_version + ",)"
+    replace "required-after:glasspane", "required-after:glasspane@[" + project.gp_version + ",)"
+    replaceIn "${project.reference_class}".replace(".", "/") + ".java"
 
     //auto-configure the run arguments
-    if(project.hasProperty('dev_uuid')) {
+    if (project.hasProperty('dev_uuid')) {
         clientRunArgs += "--uuid=${dev_uuid}"
-    }
-    else {
+    } else {
         clientRunArgs += "--username=${username}"
-        if(project.hasProperty('dev_password')) clientRunArgs += "--password=${dev_password}"
+        if (project.hasProperty('dev_password')) clientRunArgs += "--password=${dev_password}"
     }
 
     //skip the screen to confirm that you want to load a world with missing registry entries
@@ -121,17 +134,20 @@ minecraft {
 
 // API jar
 task apiJar(type: Jar) {
-    from sourceSets.api.allJava
-    include "${project.api_package}/**"
-    from ("LICENSE") {
+    onlyIf {
+        project.hasProperty("api_package")
+    }
+    from sourceSets.main.allJava
+    include findProperty("api_package").toString().replace(".", "/") + "/**"
+    from("LICENSE") {
         include "*"
     }
     manifest.mainAttributes(
             "Built-On-Java": "${System.getProperty('java.vm.version')} + (${System.getProperty('java.vm.vendor')})",
             "Implementation-Title": project.name + '-api',
             "Implementation-Version": project.version,
-            "Maven-Artifact":"${project.group}:${project.mavevArtifact}:${project.version}:api",
-            "Timestamp": buildTime,
+            "Maven-Artifact": "${project.group}:${artifactID}:${project.version}:api",
+            "Timestamp": buildTimeStamp,
             "Built-On": "${mc_version}-${forge_version}"
     )
     classifier = 'api'
@@ -140,15 +156,15 @@ task apiJar(type: Jar) {
 // Javadoc jar
 task javadocJar(type: Jar, dependsOn: javadoc) {
     from javadoc.destinationDir
-    from ("LICENSE") {
+    from("LICENSE") {
         include "*"
     }
     manifest.mainAttributes(
             "Built-On-Java": "${System.getProperty('java.vm.version')} + (${System.getProperty('java.vm.vendor')})",
             "Implementation-Title": project.name + '-javadoc',
             "Implementation-Version": project.version,
-            "Maven-Artifact":"${project.group}:${project.mavevArtifact}:${project.version}:javadoc",
-            "Timestamp": buildTime,
+            "Maven-Artifact": "${project.group}:${artifactID}:${project.version}:javadoc",
+            "Timestamp": buildTimeStamp,
             "Built-On": "${mc_version}-${forge_version}"
     )
     classifier = 'javadoc'
@@ -160,10 +176,10 @@ jar {
     manifest.mainAttributes(
             "Implementation-Title": project.name,
             "Implementation-Version": "${project.mod_version}",
+            "Maven-Artifact": "${project.group}:${artifactID}:${project.version}",
+            "Timestamp": buildTimeStamp,
             "Built-On": "${project.mc_version}-${project.forge_version}",
-            "Maven-Artifact":"${project.group}:${project.mavevArtifact}:${project.version}",
-            "Timestamp": buildTime,
-            //"FMLAT": "${project.modid}_at.cfg"
+            "FMLAT": "${project.modid}_at.cfg"
     )
 }
 
@@ -216,22 +232,24 @@ if (JavaVersion.current().isJava8Compatible()) {
 
 dependencies {
 
-    //deobfProvided "com.github.Glasspane:Glasspane:${project.gp_version}"
+    compile "com.github.glasspane:GlassPane:${gp_version}"
 }
-tasks.build.dependsOn signJar, signApiJar, signJavadocJar, publish
+
+if (project.hasProperty("api_package")) tasks.build.dependsOn signApiJar
+tasks.build.dependsOn signJar, signJavadocJar
 tasks.curseforge.dependsOn build
 
 artifacts {
-    archives apiJar
     archives javadocJar
+    if(project.hasProperty("api_package")) archives apiJar
 }
 
 publishing {
     publications {
         mavenJava(MavenPublication) {
             artifact jar
-            artifact apiJar
             artifact javadocJar
+            if(project.hasProperty("api_package")) artifact apiJar
         }
     }
 
@@ -241,8 +259,8 @@ publishing {
 }
 
 def curseRelations = {
-    //requiredLibrary '' //add curseforge-slug here
-    //optionalLibrary 'craftdev-core'
+    //requiredDependency '' //add curseforge-slug here
+    optionalDependency 'glasspane'
 }
 
 
@@ -250,22 +268,23 @@ curseforge {
     if (project.hasProperty('curse_key'))
         apiKey = project.curse_key
 
-    if(project.hasProperty('curse_id')) {
+    if (project.hasProperty('curse_id')) {
         project {
             id = project.curse_id
             changelogType = 'markdown'
             changelog = "${project.ext.changeLog}"
             releaseType = project.release_type
 
-            //relations curseRelations
+            relations curseRelations
 
             addArtifact javadocJar
             //addArtifact sourceJar
-            addArtifact apiJar
+            //addArtifact apiJar
 
-            addGameVersion '1.12'
-            addGameVersion '1.12.1'
-            addGameVersion '1.12.2'
+            //cursegradle will automatically determine the current version
+            //addGameVersion '1.12'
+            //addGameVersion '1.12.1'
+            //addGameVersion '1.12.2'
 
             mainArtifact(jar) {
                 displayName = "${project.mod_name} v${project.mod_version} MC${project.mc_version}"
@@ -275,24 +294,24 @@ curseforge {
 }
 
 processResources
-{
-    // this will ensure that this task is redone when the versions change.
-    inputs.property "version", version
-    inputs.property "mcversion", project.minecraft.version
+        {
+            // this will ensure that this task is redone when the versions change.
+            inputs.property "version", version
+            inputs.property "mcversion", project.minecraft.version
 
-    // replace stuff in mcmod.info, nothing else
-    from(sourceSets.main.resources.srcDirs) {
-        include 'mcmod.info'
-                
-        // replace version and mcversion
-        expand 'modid':project.modid, 'name':project.mod_name, 'description':project.mod_description, 'version':project.mod_version, 'mcversion':project.minecraft.version, 'url':project.url, 'updateUrl':project.update_json, 'year':String.valueOf(Year.now().getValue())
-    }
-        
-    // copy everything else, thats not the mcmod.info
-    from(sourceSets.main.resources.srcDirs) {
-        exclude 'mcmod.info'
-    }
-	
-	//ATs
-	rename '(.+_at.cfg)', 'META-INF/$1'
-}
+            // replace stuff in mcmod.info, nothing else
+            from(sourceSets.main.resources.srcDirs) {
+                include 'mcmod.info'
+
+                // replace version and mcversion
+                expand 'modid': project.modid, 'name': project.mod_name, 'description': project.mod_description, 'version': project.mod_version, 'mcversion': project.minecraft.version, 'url': project.url, 'updateUrl': project.update_json, 'year': String.valueOf(Year.now().getValue())
+            }
+
+            // copy everything else, thats not the mcmod.info
+            from(sourceSets.main.resources.srcDirs) {
+                exclude 'mcmod.info'
+            }
+
+            //ATs
+            rename '(.+_at.cfg)', 'META-INF/$1'
+        }
