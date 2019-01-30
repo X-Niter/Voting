@@ -9,20 +9,16 @@ import net.minecraft.server.management.PlayerList;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
-import java.io.BufferedWriter;
-import java.io.InputStream;
-import java.io.OutputStreamWriter;
-import java.net.InetSocketAddress;
-import java.net.ServerSocket;
-import java.net.Socket;
+import java.io.*;
+import java.net.*;
 import java.text.SimpleDateFormat;
 
 public class NetworkListenerThread extends Thread {
 
+    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-DD HH:mm:ss Z");
     private final String host;
     private final int port;
     private boolean isRunning = true;
-    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-DD HH:mm:ss Z");
 
     public NetworkListenerThread(String host, int port) {
         this.host = host;
@@ -31,7 +27,7 @@ public class NetworkListenerThread extends Thread {
 
     @Override
     public void run() {
-        try (ServerSocket serverSocket = new ServerSocket()) {
+        try(ServerSocket serverSocket = new ServerSocket()) {
             serverSocket.bind(new InetSocketAddress(this.host, this.port));
             ForgeVotifier.getLogger().info("votifier running on {}:{}", this.host, this.port);
             while(this.isRunning) {
@@ -42,49 +38,59 @@ public class NetworkListenerThread extends Thread {
                         //writer.write("VOTIFIER 1.0.0");
                         writer.newLine();
                         writer.flush();
-
-                        byte[] bytes = new byte[256];
-                        inputStream.read(bytes, 0, bytes.length);
+                        byte[] bytes;
+                        {
+                            ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
+                            int nRead;
+                            byte[] readBuffer = new byte[8192];
+                            while((nRead = inputStream.read(readBuffer, 0, readBuffer.length)) != -1) {
+                                byteStream.write(readBuffer, 0, nRead);
+                            }
+                            bytes = byteStream.toByteArray();
+                            byteStream.close();
+                        }
                         String[] lines = new String(RSAUtil.decrypt(bytes, RSAUtil.getKeyPair().getPrivate())).split("\n");
                         if(lines.length < 4) {
                             error(lines);
-                        } else {
+                        }
+                        else {
                             String opcode = lines[0].trim();
                             if("VOTE".equals(opcode)) {
                                 String service = lines[1].trim();
                                 String username = lines[2].trim();
                                 String address = lines[3].trim();
-                                String timestamp = lines.length >= 5 ? lines[4].trim() : Long.toString(System.nanoTime() / 1000000L);
+                                String timestamp = lines.length >= 5 ? lines[4].trim() : Long.toString(System.nanoTime() / 1_000_000L);
                                 FMLCommonHandler.instance().getMinecraftServerInstance().addScheduledTask(() -> { //ensure we are not handling the event on the network thread
                                     ForgeVotifier.getLogger().info("[{}] received vote from {} (service: {})", timestamp, username, service);
                                     PlayerList playerList = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList();
                                     EntityPlayerMP player = playerList.getPlayerByUsername(username);
-                                    if(player != null) MinecraftForge.EVENT_BUS.post(new VoteReceivedEvent(player, service, address, timestamp));
-                                    else RewardStore.getStore().storePlayerReward(username, service, address, timestamp);
+                                    if(player != null) {
+                                        MinecraftForge.EVENT_BUS.post(new VoteReceivedEvent(player, service, address, timestamp));
+                                    }
+                                    else {
+                                        RewardStore.getStore().storePlayerReward(username, service, address, timestamp);
+                                    }
                                 });
-                            } else {
+                            }
+                            else {
                                 error(lines);
                             }
                         }
-                    } catch(Exception e) {
+                    }
+                    catch (Exception e) {
                         ForgeVotifier.getLogger().error("Error handling socket connection!", e);
                     }
-                } catch(Exception e) {
+                }
+                catch (Exception e) {
                     ForgeVotifier.getLogger().error("Error handling socket connection!", e);
                 }
             }
         }
-        catch(Exception e) {
+        catch (Exception e) {
             this.isRunning = false;
             ForgeVotifier.getLogger().error("Votifier network error! Host: " + this.host + ", Port: " + this.port, e);
         }
         ForgeVotifier.getLogger().info("votifier thread is set to shut down!");
-    }
-
-    public void shutdown() {
-        this.isRunning = false;
-        this.interrupt();
-        ForgeVotifier.getLogger().info("votifier thread stopped!");
     }
 
     private static void error(String[] input) {
@@ -93,5 +99,11 @@ public class NetworkListenerThread extends Thread {
             builder.append(line).append("\n");
         }
         ForgeVotifier.getLogger().error("Votifier: incorrect vote received:\n-----------------------------------------------------\n{}-----------------------------------------------------", builder.toString());
+    }
+
+    public void shutdown() {
+        this.isRunning = false;
+        this.interrupt();
+        ForgeVotifier.getLogger().info("votifier thread stopped!");
     }
 }
