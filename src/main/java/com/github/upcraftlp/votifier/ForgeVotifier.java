@@ -25,7 +25,7 @@ public class ForgeVotifier {
     //Meta Information
     public static final String MODNAME = "Forge Votifier";
     public static final String MODID = "votifier";
-    public static final String DEPENDENCIES = "";
+    public static final String DEPENDENCIES = "after:thutessentials@[2.2.16,)";
     public static final String UPDATE_JSON = "@UPDATE_JSON@";
 
     public static final String FINGERPRINT_KEY = "@FINGERPRINTKEY@";
@@ -45,7 +45,7 @@ public class ForgeVotifier {
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         GLASSPANE_LOADED = Loader.isModLoaded("glasspane");
-        THUTESSENTIALS_LOADED = Loader.isModLoaded("");
+        THUTESSENTIALS_LOADED = Loader.isModLoaded("thutessentials");
         if(VotifierConfig.updates.enableUpdateChecker) {
             if(isGlasspaneLoaded()) {
                 com.github.upcraftlp.glasspane.util.ModUpdateHandler.registerMod(MODID);
