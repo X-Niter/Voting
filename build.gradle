@@ -233,6 +233,8 @@ if (JavaVersion.current().isJava8Compatible()) {
 dependencies {
 
     compile "com.github.glasspane:GlassPane:${gp_version}"
+
+    deobfCompile "thut-essentials:thutessentials:1.12.2:${thut_essentials_version}"
 }
 
 if (project.hasProperty("api_package")) tasks.build.dependsOn signApiJar
@@ -261,6 +263,7 @@ publishing {
 def curseRelations = {
     //requiredDependency '' //add curseforge-slug here
     optionalDependency 'glasspane'
+    optionalDependency 'thut-essentials'
 }
 
 
