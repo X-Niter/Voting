@@ -1,5 +1,11 @@
 ------------------------------------------------------
-Version 1.2
+Version 1.3.0
+------------------------------------------------------
+- fix bad padding and timestamp issues
+- add support for thut essentials balance as reward
+
+------------------------------------------------------
+Version 1.2.0
 ------------------------------------------------------
 - no more backporting!
 - added support for openjdk not writing to files properly
