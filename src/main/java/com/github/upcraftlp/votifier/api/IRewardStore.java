@@ -9,5 +9,4 @@ public interface IRewardStore {
     void storePlayerReward(String name, String service, String address, String timestamp);
 
     void claimRewards(String name);
-
 }

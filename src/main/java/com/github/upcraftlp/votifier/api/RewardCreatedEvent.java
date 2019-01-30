@@ -15,6 +15,7 @@ public class RewardCreatedEvent extends Event {
 
     /**
      * fired on the {@link MinecraftForge#EVENT_BUS} when an unknown Reward is to be parsed
+     *
      * @param json
      * @param type
      */

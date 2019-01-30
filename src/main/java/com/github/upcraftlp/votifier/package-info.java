@@ -1,8 +1,7 @@
 /**
  * (c)2018 UpcraftLP
  */
-@MethodsReturnNonnullByDefault
-@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault @ParametersAreNonnullByDefault
 package com.github.upcraftlp.votifier;
 
 import mcp.MethodsReturnNonnullByDefault;

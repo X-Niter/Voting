@@ -7,14 +7,8 @@ import org.apache.commons.io.FileUtils;
 import javax.crypto.Cipher;
 import javax.xml.bind.DatatypeConverter;
 import java.io.File;
-import java.security.KeyFactory;
-import java.security.KeyPair;
-import java.security.KeyPairGenerator;
-import java.security.PrivateKey;
-import java.security.PublicKey;
-import java.security.spec.PKCS8EncodedKeySpec;
-import java.security.spec.RSAKeyGenParameterSpec;
-import java.security.spec.X509EncodedKeySpec;
+import java.security.*;
+import java.security.spec.*;
 import java.util.Scanner;
 
 public class RSAUtil {
@@ -44,27 +38,30 @@ public class RSAUtil {
     private static KeyPair loadOrGenerateKeyPair(File directory) {
         File pubKeyFile = new File(directory, "id_rsa.pub");
         File privKeyFile = new File(directory, "id_rsa");
-
         if(pubKeyFile.exists() && privKeyFile.exists()) {
             try(Scanner scPub = new Scanner(pubKeyFile); Scanner scPriv = new Scanner(privKeyFile)) {
                 KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-
                 //public
                 StringBuilder builder = new StringBuilder();
-                while(scPub.hasNext()) builder.append(scPub.next());
+                while(scPub.hasNext()) {
+                    builder.append(scPub.next());
+                }
                 PublicKey pubKey = keyFactory.generatePublic(new X509EncodedKeySpec(DatatypeConverter.parseBase64Binary(builder.toString())));
-
                 //private
                 builder = new StringBuilder();
-                while(scPriv.hasNextLine()) builder.append(scPriv.nextLine());
+                while(scPriv.hasNextLine()) {
+                    builder.append(scPriv.nextLine());
+                }
                 PrivateKey privKey = keyFactory.generatePrivate(new PKCS8EncodedKeySpec(DatatypeConverter.parseBase64Binary(builder.toString())));
                 return new KeyPair(pubKey, privKey);
-            } catch(Exception e) {
+            }
+            catch (Exception e) {
                 ForgeVotifier.getLogger().error("Error reading RSA key from file, it will be discarded!", e);
                 FileUtils.deleteQuietly(pubKeyFile);
                 FileUtils.deleteQuietly(privKeyFile);
             }
-        } else {
+        }
+        else {
             ForgeVotifier.getLogger().info("No RSA Key found, generating a new one!");
         }
         return genStoreKeyPair(directory);
@@ -80,12 +77,13 @@ public class RSAUtil {
             directory.mkdirs();
             pubKeyFile.createNewFile();
             privKeyFile.createNewFile();
-
             FileUtils.writeByteArrayToFile(pubKeyFile, DatatypeConverter.printBase64Binary(new X509EncodedKeySpec(keyPair.getPublic().getEncoded()).getEncoded()).getBytes());
             FileUtils.writeByteArrayToFile(privKeyFile, DatatypeConverter.printBase64Binary(new PKCS8EncodedKeySpec(keyPair.getPrivate().getEncoded()).getEncoded()).getBytes());
-            if(ForgeVotifier.isDebugMode()) ForgeVotifier.getLogger().info("successfully saved new RSA keypair to \"{}\"", directory.getAbsolutePath());
+            if(ForgeVotifier.isDebugMode()) {
+                ForgeVotifier.getLogger().info("successfully saved new RSA keypair to \"{}\"", directory.getAbsolutePath());
+            }
         }
-        catch(Exception e) {
+        catch (Exception e) {
             ForgeVotifier.getLogger().error("Exception storing RSA keypair!", e);
         }
         return keyPair;
@@ -99,10 +97,12 @@ public class RSAUtil {
             keyGen.initialize(spec);
             KeyPair ret = keyGen.generateKeyPair();
             ForgeVotifier.getLogger().info("Successfully generated new RSA keypair!");
-            if(ForgeVotifier.isDebugMode()) ForgeVotifier.getLogger().info("public key: {}", new String(ret.getPublic().getEncoded()));
+            if(ForgeVotifier.isDebugMode()) {
+                ForgeVotifier.getLogger().info("public key: {}", new String(ret.getPublic().getEncoded()));
+            }
             return ret;
         }
-        catch(Exception e) {
+        catch (Exception e) {
             ForgeVotifier.getLogger().error("Error generating key!", e);
             throw new RuntimeException();
         }

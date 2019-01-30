@@ -2,12 +2,9 @@ package com.github.upcraftlp.votifier.reward;
 
 import com.github.upcraftlp.votifier.ForgeVotifier;
 import com.github.upcraftlp.votifier.api.reward.Reward;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.*;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextComponentUtils;
+import net.minecraft.util.text.*;
 
 public class RewardChat extends Reward {
 
@@ -37,9 +34,11 @@ public class RewardChat extends Reward {
                         playerMP.sendMessage(TextComponentUtils.processComponent(server, textComponent, playerMP));
                     }
                 }
-                else player.sendMessage(TextComponentUtils.processComponent(server, textComponent, player));
+                else {
+                    player.sendMessage(TextComponentUtils.processComponent(server, textComponent, player));
+                }
             }
-            catch(Exception e) {
+            catch (Exception e) {
                 ForgeVotifier.getLogger().error("error parsing chat reward!", e);
             }
         }
@@ -47,8 +46,12 @@ public class RewardChat extends Reward {
             String[] messages = msg.split("\n");
             for(String messageString : messages) {
                 ITextComponent textComponent = new TextComponentString(messageString);
-                if(this.broadcastMessage) server.getPlayerList().sendMessage(textComponent);
-                else player.sendMessage(textComponent);
+                if(this.broadcastMessage) {
+                    server.getPlayerList().sendMessage(textComponent);
+                }
+                else {
+                    player.sendMessage(textComponent);
+                }
             }
         }
     }

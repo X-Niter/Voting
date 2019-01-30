@@ -6,8 +6,7 @@ import javax.annotation.Nullable;
 
 public class RewardStore {
 
-    @SuppressWarnings("unused")
-    private static IRewardStore INSTANCE = null;
+    @SuppressWarnings("unused") private static IRewardStore INSTANCE = null;
 
     /**
      * get the current reward store
@@ -17,5 +16,4 @@ public class RewardStore {
     public static IRewardStore getStore() {
         return INSTANCE;
     }
-
 }

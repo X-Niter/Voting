@@ -1,16 +1,18 @@
 [
-{
-  "modid": "${modid}",
-  "name": "${name}",
-  "description": "${description}",
-  "version": "${version}",
-  "mcversion": "${mcversion}",
-  "url": "${url}",
-  "updateUrl": "${updateUrl}",
-  "authorList": ["UpcraftLP"],
-  "credits": "(C)2018-${year} UpcraftLP",
-  "logoFile": "",
-  "screenshots": [],
-  "dependencies": []
-}
+    {
+        "modid": "${modid}",
+        "name": "${name}",
+        "description": "${description}",
+        "version": "${version}",
+        "mcversion": "${mcversion}",
+        "url": "${url}",
+        "updateUrl": "${updateUrl}",
+        "authorList": [
+            "UpcraftLP"
+        ],
+        "credits": "(C)2018-${year} UpcraftLP",
+        "logoFile": "",
+        "screenshots": [],
+        "dependencies": []
+    }
 ]

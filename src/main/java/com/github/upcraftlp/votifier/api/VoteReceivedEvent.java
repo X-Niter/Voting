@@ -27,5 +27,4 @@ public class VoteReceivedEvent extends PlayerEvent {
     public String getRemoteAddress() {
         return address;
     }
-
 }

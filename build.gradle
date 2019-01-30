@@ -243,7 +243,7 @@ tasks.curseforge.dependsOn build
 
 artifacts {
     archives javadocJar
-    if(project.hasProperty("api_package")) archives apiJar
+    if (project.hasProperty("api_package")) archives apiJar
 }
 
 publishing {
@@ -251,7 +251,7 @@ publishing {
         mavenJava(MavenPublication) {
             artifact jar
             artifact javadocJar
-            if(project.hasProperty("api_package")) artifact apiJar
+            if (project.hasProperty("api_package")) artifact apiJar
         }
     }
 

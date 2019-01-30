@@ -3,13 +3,9 @@ package com.github.upcraftlp.votifier.config;
 import com.github.upcraftlp.votifier.ForgeVotifier;
 import com.github.upcraftlp.votifier.api.RewardCreatedEvent;
 import com.github.upcraftlp.votifier.api.reward.Reward;
-import com.github.upcraftlp.votifier.reward.RewardChat;
-import com.github.upcraftlp.votifier.reward.RewardCommand;
-import com.github.upcraftlp.votifier.reward.RewardItem;
 import com.github.upcraftlp.votifier.event.VoteEventHandler;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import com.github.upcraftlp.votifier.reward.*;
+import com.google.gson.*;
 import net.minecraft.command.CommandBase;
 import net.minecraft.item.Item;
 import net.minecraft.server.MinecraftServer;
@@ -17,9 +13,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import org.apache.commons.io.FileUtils;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.Locale;
 
 public class RewardParser {
@@ -29,7 +23,6 @@ public class RewardParser {
         if(!configDir.exists()) {
             setupDefaultRewards(configDir);
         }
-
         File[] jsonFiles = configDir.listFiles((dir, name) -> name.toLowerCase(Locale.ROOT).endsWith(".json"));
         JsonParser parser = new JsonParser();
         int regCount = 0;
@@ -63,6 +56,16 @@ public class RewardParser {
                             String nbtRaw = object.has("nbt") ? object.get("nbt").getAsString() : null;
                             reward = new RewardItem(item, count, meta, nbtRaw);
                             break;
+                        case "thut_pay":
+                            if(ForgeVotifier.isThutessentialsLoaded()) {
+                                int amount = object.get("amount").getAsInt();
+                                reward = new RewardThutBalance(amount);
+                            }
+                            else {
+                                ForgeVotifier.getLogger().error("found reward thut_pay, but thut essentials is not loaded!");
+                                reward = null;
+                            }
+                            break;
                         default: //allow for custom rewards from other mods
                             RewardCreatedEvent rewardEvent = new RewardCreatedEvent(type, object);
                             MinecraftForge.EVENT_BUS.post(rewardEvent);
@@ -72,10 +75,12 @@ public class RewardParser {
                         VoteEventHandler.addReward(reward);
                         regCount++;
                     }
-                    else ForgeVotifier.getLogger().warn("ignoring unknown votifier reward type: {}", type);
+                    else {
+                        ForgeVotifier.getLogger().warn("ignoring unknown votifier reward type: {}", type);
+                    }
                 }
             }
-            catch(Exception e) {
+            catch (Exception e) {
                 ForgeVotifier.getLogger().error("error parsing reward file " + jsonFile.getName() + "!", e);
             }
             ForgeVotifier.getLogger().info("Votifier registered a total of {} rewards in {} files!", regCount, jsonFiles.length);
@@ -86,8 +91,9 @@ public class RewardParser {
         File defaultConfig = new File(rewardsDir, "default_rewards.json");
         try {
             FileUtils.forceMkdir(rewardsDir);
-            FileUtils.copyToFile(MinecraftServer.class.getClassLoader().getResourceAsStream("assets/" + ForgeVotifier.MODID +"/reward/default_rewards.json"), defaultConfig);
-        } catch(IOException e) {
+            FileUtils.copyToFile(MinecraftServer.class.getClassLoader().getResourceAsStream("assets/" + ForgeVotifier.MODID + "/reward/default_rewards.json"), defaultConfig);
+        }
+        catch (IOException e) {
             ForgeVotifier.getLogger().error("Exception setting up the default reward config!", e);
         }
     }

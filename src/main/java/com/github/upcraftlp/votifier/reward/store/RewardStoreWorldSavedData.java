@@ -1,25 +1,19 @@
 package com.github.upcraftlp.votifier.reward.store;
 
 import com.github.upcraftlp.votifier.ForgeVotifier;
-import com.github.upcraftlp.votifier.api.IRewardStore;
-import com.github.upcraftlp.votifier.api.VoteReceivedEvent;
+import com.github.upcraftlp.votifier.api.*;
 import com.github.upcraftlp.votifier.api.reward.StoredReward;
 import com.github.upcraftlp.votifier.config.VotifierConfig;
 import com.google.common.collect.Maps;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.*;
 import net.minecraft.world.World;
-import net.minecraft.world.storage.MapStorage;
-import net.minecraft.world.storage.WorldSavedData;
+import net.minecraft.world.storage.*;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 public class RewardStoreWorldSavedData extends WorldSavedData implements IRewardStore {
 
@@ -75,7 +69,9 @@ public class RewardStoreWorldSavedData extends WorldSavedData implements IReward
             NBTTagCompound nbt = new NBTTagCompound();
             nbt.setString("player", playerName);
             List<StoredReward> rewards = STORED_REWARDS.get(playerName);
-            if(rewards == null) continue;
+            if(rewards == null) {
+                continue;
+            }
             NBTTagList playerRewardList = new NBTTagList();
             for(StoredReward reward : rewards) {
                 NBTTagCompound rewardTag = new NBTTagCompound();
@@ -103,18 +99,16 @@ public class RewardStoreWorldSavedData extends WorldSavedData implements IReward
 
     @Override
     public void storePlayerReward(String name, String service, String address, String timestamp) {
-        if(getMaxStoredRewards() == 0) return; //do not store anything
+        if(getMaxStoredRewards() == 0) {
+            return; //do not store anything
+        }
         ForgeVotifier.getLogger().debug("cannot find player {}, assuming they're offline and storing reward.", name);
         List<StoredReward> rewards = getRewardsForPlayer(name);
-        while(rewards.size() > getMaxStoredRewards()) rewards.remove(0); //discard old rewards
+        while(rewards.size() > getMaxStoredRewards()) {
+            rewards.remove(0); //discard old rewards
+        }
         rewards.add(new StoredReward(name, service, address, timestamp));
         this.markDirty();
-    }
-
-    private List<StoredReward> getRewardsForPlayer(String name) {
-        name = name.toLowerCase(Locale.ROOT);
-        if(!STORED_REWARDS.containsKey(name)) STORED_REWARDS.put(name, new ArrayList<>());
-        return STORED_REWARDS.get(name);
     }
 
     @Override
@@ -130,5 +124,13 @@ public class RewardStoreWorldSavedData extends WorldSavedData implements IReward
         ForgeVotifier.getLogger().debug("player {} claimed their {} outstanding rewards", name, rewards.size());
         rewards.clear();
         this.markDirty();
+    }
+
+    private List<StoredReward> getRewardsForPlayer(String name) {
+        name = name.toLowerCase(Locale.ROOT);
+        if(!STORED_REWARDS.containsKey(name)) {
+            STORED_REWARDS.put(name, new ArrayList<>());
+        }
+        return STORED_REWARDS.get(name);
     }
 }
