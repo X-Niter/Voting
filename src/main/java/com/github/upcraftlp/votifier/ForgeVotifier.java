@@ -1,18 +1,29 @@
 package com.github.upcraftlp.votifier;
 
-import com.github.upcraftlp.votifier.api.reward.RewardStore;
 import com.github.upcraftlp.votifier.command.CommandVote;
-import com.github.upcraftlp.votifier.config.*;
+import com.github.upcraftlp.votifier.config.RewardParser;
+import com.github.upcraftlp.votifier.config.VotifierConfig;
 import com.github.upcraftlp.votifier.net.NetworkListenerThread;
-import com.github.upcraftlp.votifier.reward.store.RewardStoreWorldSavedData;
-import com.github.upcraftlp.votifier.util.*;
+import com.github.upcraftlp.votifier.util.ModUpdateHandler;
+import com.github.upcraftlp.votifier.util.RSAUtil;
 import net.minecraft.util.StringUtils;
-import net.minecraftforge.fml.common.*;
-import net.minecraftforge.fml.common.event.*;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
-import org.apache.logging.log4j.*;
+import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartedEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
+import net.minecraftforge.fml.common.event.FMLServerStoppingEvent;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-import static com.github.upcraftlp.votifier.ForgeVotifier.*;
+import static com.github.upcraftlp.votifier.ForgeVotifier.DEPENDENCIES;
+import static com.github.upcraftlp.votifier.ForgeVotifier.FINGERPRINT_KEY;
+import static com.github.upcraftlp.votifier.ForgeVotifier.MCVERSIONS;
+import static com.github.upcraftlp.votifier.ForgeVotifier.MODID;
+import static com.github.upcraftlp.votifier.ForgeVotifier.MODNAME;
+import static com.github.upcraftlp.votifier.ForgeVotifier.UPDATE_JSON;
+import static com.github.upcraftlp.votifier.ForgeVotifier.VERSION;
 
 @SuppressWarnings("WeakerAccess")
 @Mod(certificateFingerprint = FINGERPRINT_KEY, name = MODNAME, version = VERSION, acceptedMinecraftVersions = MCVERSIONS, modid = MODID, dependencies = DEPENDENCIES, updateJSON = UPDATE_JSON, serverSideOnly = true, acceptableRemoteVersions = "*")
@@ -96,7 +107,6 @@ public class ForgeVotifier {
     @Mod.EventHandler
     public void onServerStarted(FMLServerStartedEvent event) {
         ModUpdateHandler.notifyServer();
-        ReflectionHelper.setPrivateValue(RewardStore.class, null, RewardStoreWorldSavedData.get(), "INSTANCE");
         if(isDebugMode()) {
             log.info("server started successfully!");
         }

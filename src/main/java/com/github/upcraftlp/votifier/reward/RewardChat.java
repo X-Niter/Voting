@@ -1,10 +1,14 @@
 package com.github.upcraftlp.votifier.reward;
 
-import com.github.upcraftlp.votifier.ForgeVotifier;
+import com.github.upcraftlp.votifier.api.RewardException;
 import com.github.upcraftlp.votifier.api.reward.Reward;
-import net.minecraft.entity.player.*;
+import net.minecraft.command.CommandException;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.text.*;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentUtils;
 
 public class RewardChat extends Reward {
 
@@ -24,11 +28,14 @@ public class RewardChat extends Reward {
     }
 
     @Override
-    public void activate(MinecraftServer server, EntityPlayer player, String timestamp, String service, String address) {
+    public void activate(MinecraftServer server, EntityPlayer player, String timestamp, String service, String address) throws RewardException {
         String msg = replace(messageRaw, player, service);
         if(this.parseAsTellraw) {
             try {
                 ITextComponent textComponent = ITextComponent.Serializer.jsonToComponent(msg);
+                if(textComponent == null) {
+                    throw new CommandException("parsed component from message was null: " + msg);
+                }
                 if(this.broadcastMessage) {
                     for(EntityPlayerMP playerMP : server.getPlayerList().getPlayers()) {
                         playerMP.sendMessage(TextComponentUtils.processComponent(server, textComponent, playerMP));
@@ -38,8 +45,8 @@ public class RewardChat extends Reward {
                     player.sendMessage(TextComponentUtils.processComponent(server, textComponent, player));
                 }
             }
-            catch (Exception e) {
-                ForgeVotifier.getLogger().error("error parsing chat reward!", e);
+            catch (CommandException e) {
+                throw new RewardException("error parsing chat reward!", e);
             }
         }
         else {

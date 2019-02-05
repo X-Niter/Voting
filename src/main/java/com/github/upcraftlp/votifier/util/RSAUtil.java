@@ -4,27 +4,55 @@ import com.github.upcraftlp.votifier.ForgeVotifier;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import org.apache.commons.io.FileUtils;
 
+import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import javax.xml.bind.DatatypeConverter;
 import java.io.File;
-import java.security.*;
-import java.security.spec.*;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.KeyFactory;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.RSAKeyGenParameterSpec;
+import java.security.spec.X509EncodedKeySpec;
 import java.util.Scanner;
 
 public class RSAUtil {
 
     private static KeyPair RSA_KEYPAIR = null;
 
-    public static byte[] decrypt(byte[] data, PrivateKey key) throws Exception {
-        Cipher cipher = Cipher.getInstance("RSA");
-        cipher.init(Cipher.DECRYPT_MODE, key);
-        return cipher.doFinal(data);
+    public static byte[] decrypt(byte[] data, PrivateKey key) {
+        try {
+            Cipher cipher = Cipher.getInstance("RSA");
+            cipher.init(Cipher.DECRYPT_MODE, key);
+            return cipher.doFinal(data);
+        }
+        catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException e) {
+            ForgeVotifier.getLogger().error("an error occured during decryption of data " + new String(data, StandardCharsets.UTF_8), e);
+        }
+        return data;
     }
 
-    public static byte[] encrypt(byte[] data, PublicKey key) throws Exception {
-        Cipher cipher = Cipher.getInstance("RSA");
-        cipher.init(Cipher.ENCRYPT_MODE, key);
-        return cipher.doFinal(data);
+    public static byte[] encrypt(byte[] data, PublicKey key) {
+        try {
+            Cipher cipher = Cipher.getInstance("RSA");
+            cipher.init(Cipher.ENCRYPT_MODE, key);
+            return cipher.doFinal(data);
+        }
+        catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException e) {
+            ForgeVotifier.getLogger().error("an error occured during encryption of data " + new String(data, StandardCharsets.UTF_8), e);
+        }
+        return data;
     }
 
     public static KeyPair getKeyPair() {
@@ -55,7 +83,7 @@ public class RSAUtil {
                 PrivateKey privKey = keyFactory.generatePrivate(new PKCS8EncodedKeySpec(DatatypeConverter.parseBase64Binary(builder.toString())));
                 return new KeyPair(pubKey, privKey);
             }
-            catch (Exception e) {
+            catch (FileNotFoundException | NoSuchAlgorithmException | InvalidKeySpecException e) {
                 ForgeVotifier.getLogger().error("Error reading RSA key from file, it will be discarded!", e);
                 FileUtils.deleteQuietly(pubKeyFile);
                 FileUtils.deleteQuietly(privKeyFile);
@@ -83,7 +111,7 @@ public class RSAUtil {
                 ForgeVotifier.getLogger().info("successfully saved new RSA keypair to \"{}\"", directory.getAbsolutePath());
             }
         }
-        catch (Exception e) {
+        catch (IOException e) {
             ForgeVotifier.getLogger().error("Exception storing RSA keypair!", e);
         }
         return keyPair;
@@ -102,7 +130,7 @@ public class RSAUtil {
             }
             return ret;
         }
-        catch (Exception e) {
+        catch (NoSuchAlgorithmException | InvalidAlgorithmParameterException e) {
             ForgeVotifier.getLogger().error("Error generating key!", e);
             throw new RuntimeException();
         }

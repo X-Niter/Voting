@@ -9,13 +9,18 @@ import net.minecraft.server.management.PlayerList;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
-import java.io.*;
-import java.net.*;
-import java.text.SimpleDateFormat;
+import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStreamWriter;
+import java.net.InetSocketAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 
 public class NetworkListenerThread extends Thread {
 
-    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-DD HH:mm:ss Z");
     private final String host;
     private final int port;
     private boolean isRunning = true;
@@ -29,13 +34,12 @@ public class NetworkListenerThread extends Thread {
     public void run() {
         try(ServerSocket serverSocket = new ServerSocket()) {
             serverSocket.bind(new InetSocketAddress(this.host, this.port));
-            ForgeVotifier.getLogger().info("votifier running on {}:{}", this.host, this.port);
+            ForgeVotifier.getLogger().info("votifier {} running on {}:{}", ForgeVotifier.VERSION, this.host, this.port);
             while(this.isRunning) {
                 try(Socket socket = serverSocket.accept()) {
                     socket.setSoTimeout(5000); //workaround for slow connections
                     try(BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())); InputStream inputStream = socket.getInputStream()) {
-                        writer.write("FORGE VOTIFIER running on [" + ForgeVotifier.VERSION + "]");
-                        //writer.write("VOTIFIER 1.0.0");
+                        writer.write("FORGE VOTIFIER " + ForgeVotifier.VERSION + " on " + this.host + ":" + this.port);
                         writer.newLine();
                         writer.flush();
                         byte[] bytes;
@@ -49,7 +53,7 @@ public class NetworkListenerThread extends Thread {
                             bytes = byteStream.toByteArray();
                             byteStream.close();
                         }
-                        String[] lines = new String(RSAUtil.decrypt(bytes, RSAUtil.getKeyPair().getPrivate())).split("\n");
+                        String[] lines = new String(RSAUtil.decrypt(bytes, RSAUtil.getKeyPair().getPrivate()), StandardCharsets.UTF_8).split("\n");
                         if(lines.length < 4) {
                             error(lines);
                         }
@@ -77,20 +81,20 @@ public class NetworkListenerThread extends Thread {
                             }
                         }
                     }
-                    catch (Exception e) {
+                    catch (IOException e) {
                         ForgeVotifier.getLogger().error("Error handling socket connection!", e);
                     }
                 }
-                catch (Exception e) {
+                catch (IOException e) {
                     ForgeVotifier.getLogger().error("Error handling socket connection!", e);
                 }
             }
         }
-        catch (Exception e) {
+        catch (IOException e) {
             this.isRunning = false;
             ForgeVotifier.getLogger().error("Votifier network error! Host: " + this.host + ", Port: " + this.port, e);
         }
-        ForgeVotifier.getLogger().info("votifier thread is set to shut down!");
+        ForgeVotifier.getLogger().info("votifier thread is set to shut down!\tVotifier {}", ForgeVotifier.VERSION);
     }
 
     private static void error(String[] input) {

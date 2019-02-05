@@ -1,6 +1,7 @@
 package com.github.upcraftlp.votifier.event;
 
 import com.github.upcraftlp.votifier.ForgeVotifier;
+import com.github.upcraftlp.votifier.api.RewardException;
 import com.github.upcraftlp.votifier.api.VoteReceivedEvent;
 import com.github.upcraftlp.votifier.api.reward.*;
 import com.github.upcraftlp.votifier.command.CommandVote;
@@ -30,7 +31,7 @@ public class VoteEventHandler {
             try {
                 reward.activate(server, event.getEntityPlayer(), event.getTimestamp(), event.getServiceDescriptor(), event.getRemoteAddress());
             }
-            catch (Exception e) {
+            catch (RewardException e) {
                 ForgeVotifier.getLogger().error("Error executing votifier reward, removing reward from reward list!", e);
                 iterator.remove();
             }

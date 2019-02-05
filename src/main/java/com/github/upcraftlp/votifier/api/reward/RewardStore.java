@@ -1,12 +1,11 @@
 package com.github.upcraftlp.votifier.api.reward;
 
 import com.github.upcraftlp.votifier.api.IRewardStore;
+import com.github.upcraftlp.votifier.reward.store.RewardStoreWorldSavedData;
 
 import javax.annotation.Nullable;
 
 public class RewardStore {
-
-    @SuppressWarnings("unused") private static IRewardStore INSTANCE = null;
 
     /**
      * get the current reward store
@@ -14,6 +13,6 @@ public class RewardStore {
      */
     @Nullable
     public static IRewardStore getStore() {
-        return INSTANCE;
+        return RewardStoreWorldSavedData.get();
     }
 }
