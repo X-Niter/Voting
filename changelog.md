@@ -1,4 +1,12 @@
 ------------------------------------------------------
+Version 1.3.1
+------------------------------------------------------
+- Revised Config. Fixed spelling, added more detail
+to help with editing
+- Fixed #10: Votifier should work with ftbservers.com
+- Added log.info of Flea edit
+- Removed the need for permissions
+------------------------------------------------------
 Version 1.3.0
 ------------------------------------------------------
 - fix bad padding and timestamp issues

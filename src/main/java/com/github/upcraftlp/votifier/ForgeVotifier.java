@@ -55,6 +55,7 @@ public class ForgeVotifier {
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
+        log.info("Votifier - Forge Version: Flea Fork");
         GLASSPANE_LOADED = Loader.isModLoaded("glasspane");
         THUTESSENTIALS_LOADED = Loader.isModLoaded("thutessentials");
         if(VotifierConfig.updates.enableUpdateChecker) {

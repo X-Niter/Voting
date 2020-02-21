@@ -17,6 +17,16 @@ public class CommandVote extends CommandTreeBase {
         addSubcommand(new CommandTreeHelp(this));
     }
 
+    @Override
+    public int getRequiredPermissionLevel() {
+        return 0;
+    }
+
+    @Override
+    public boolean checkPermission(MinecraftServer server, ICommandSender sender) {
+        return true;
+    }
+
     public static ITextComponent getOutstandingRewardsText(int rewardsOutstanding) {
         ITextComponent comp1 = new TextComponentString("You have " + rewardsOutstanding + " rewards outstanding, use ");
         ITextComponent comp2 = new TextComponentString("/vote claim").setStyle(new Style().setColor(TextFormatting.GREEN));
