@@ -1,3 +1,7 @@
+Version 1.3.3
+------------------------------------------------------
+- Updated gradle.properties variable: update_json. 
+- Should now correctly check for version updates.
 ------------------------------------------------------
 Version 1.3.2
 ------------------------------------------------------
