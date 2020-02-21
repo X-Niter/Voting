@@ -1,4 +1,9 @@
 ------------------------------------------------------
+Version 1.3.2
+------------------------------------------------------
+- Updated versions.json to reflect updates
+- This in turn allows updatechecker to work now(hopefully)
+------------------------------------------------------
 Version 1.3.1
 ------------------------------------------------------
 - Revised Config. Fixed spelling, added more detail

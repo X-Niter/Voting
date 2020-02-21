@@ -1,8 +1,8 @@
 {
     "homepage": "https://minecraft.curseforge.com/projects/293830",
     "promos": {
-        "1.12.2-latest": "1.3.0",
-        "1.12.2-recommended": "1.3.0",
+        "1.12.2-latest": "1.3.2",
+        "1.12.2-recommended": "1.3.2",
         "1.11.2-latest": "1.1.2",
         "1.10.2-latest": "1.1.2",
         "1.9.4-latest": "1.1.2",
@@ -10,6 +10,8 @@
         "1.8-latest": "1.1.2"
     },
     "1.12.2": {
+        "1.3.2": "- Properly implemented the correct version. Now it should say there is an update. Oops",
+        "1.3.1": "- Revised Config\n- Fixed #10: Votifier should work with ftbservers.com\n- Added log.info of Flea edit\n -Removed the need for permissions",
         "1.3.0": "- fix bad padding and timestamp issues\n- add support for thut essentials balance as reward",
         "1.2.0": "- no more backporting!\n- added support for openjdk not writing to files properly"
     },
