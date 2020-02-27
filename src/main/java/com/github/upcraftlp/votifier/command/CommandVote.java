@@ -14,6 +14,9 @@ public class CommandVote extends CommandTreeBase {
     public CommandVote() {
         addSubcommand(new CommandVoteClaim());
         addSubcommand(new CommandVoteGet());
+        addSubcommand(new CommandVoteFake());
+        addSubcommand(new CommandVoteReload());
+        addSubcommand(new CommandVoteCreate());
         addSubcommand(new CommandTreeHelp(this));
     }
 
@@ -45,7 +48,7 @@ public class CommandVote extends CommandTreeBase {
 
     @Override
     public String getUsage(ICommandSender sender) {
-        return "/vote [claim|get]";
+        return "/vote - Show voting information";
     }
 
     @Override

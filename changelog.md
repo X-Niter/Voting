@@ -1,3 +1,12 @@
+Version 1.4.0
+------------------------------------------------------
+- Added 3 new commands: fake, reload, create
+- /vote fake - Create a fake vote to test rewards
+- /vote reload - Reloads the rewards folder
+- /vote createDefaultRewards - Creates a new default_rewards.json file
+- All commands now have better usage when using /vote help
+- Made RewardParser talk smarter rather than repeating itself
+------------------------------------------------------
 Version 1.3.3
 ------------------------------------------------------
 - Updated gradle.properties variable: update_json. 

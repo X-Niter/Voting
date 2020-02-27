@@ -14,7 +14,7 @@ public class CommandVoteGet extends CommandBase {
 
     @Override
     public String getUsage(ICommandSender sender) {
-        return "/vote get";
+        return "/vote get - Shows current outstanding rewards";
     }
 
     @Override

@@ -13,7 +13,7 @@ public class CommandVoteClaim extends CommandBase {
 
     @Override
     public String getUsage(ICommandSender sender) {
-        return "/vote claim";
+        return "/vote claim - Claim current outstanding rewards";
     }
 
     @Override
