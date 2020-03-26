@@ -38,7 +38,8 @@ public class NetworkListenerThread extends Thread {
                 try(Socket socket = serverSocket.accept()) {
                     socket.setSoTimeout(5000); //workaround for slow connections
                     try(BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())); InputStream inputStream = socket.getInputStream()) {
-                        writer.write("FORGE VOTIFIER running on [" + ForgeVotifier.VERSION + "]");
+                        writer.write("VOTIFIER " + ForgeVotifier.VERSION);
+                        // writer.write("FORGE VOTIFIER running on [" + ForgeVotifier.VERSION + "]");
                         //writer.write("VOTIFIER 1.0.0");
                         writer.newLine();
                         writer.flush();
