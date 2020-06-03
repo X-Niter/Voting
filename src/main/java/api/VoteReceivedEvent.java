@@ -7,16 +7,16 @@ public class VoteReceivedEvent extends PlayerEvent {
 
     private final String service;
     private final String address;
-    private final long timestamp;
+    private final String timestamp;
 
-    public VoteReceivedEvent(EntityPlayerMP player, String service, String address, long timestamp) {
+    public VoteReceivedEvent(EntityPlayerMP player, String service, String address, String timestamp) {
         super(player);
         this.service = service;
         this.address = address;
         this.timestamp = timestamp;
     }
 
-    public long getTimestamp() {
+    public String getTimestamp() {
         return timestamp;
     }
 

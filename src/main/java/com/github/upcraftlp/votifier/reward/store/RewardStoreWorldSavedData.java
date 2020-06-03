@@ -62,7 +62,7 @@ public class RewardStoreWorldSavedData extends WorldSavedData implements IReward
                 NBTTagCompound rewardTag = rewardList.getCompoundTagAt(i);
                 String service = rewardTag.getString("service");
                 String address = rewardTag.getString("address");
-                long timestamp = rewardTag.getLong("timestamp");
+                String timestamp = rewardTag.getString("timestamp");
                 rewards.add(new StoredReward(playerName, service, address, timestamp));
             }
             STORED_REWARDS.put(playerName, rewards);
@@ -82,7 +82,7 @@ public class RewardStoreWorldSavedData extends WorldSavedData implements IReward
                 NBTTagCompound rewardTag = new NBTTagCompound();
                 rewardTag.setString("service", reward.service);
                 rewardTag.setString("address", reward.address);
-                rewardTag.setLong("timestamp", reward.timestamp);
+                rewardTag.setString("timestamp", reward.timestamp);
                 playerRewardList.appendTag(rewardTag);
             }
             nbt.setTag("rewards", playerRewardList);
@@ -102,11 +102,10 @@ public class RewardStoreWorldSavedData extends WorldSavedData implements IReward
     }
 
     @Override
-    public void storePlayerReward(String name, String service, String address, long timestamp) {
+    public void storePlayerReward(String name, String service, String address, String timestamp) {
         if(getMaxStoredRewards() == 0) return; //do not store anything
         ForgeVotifier.getLogger().debug("cannot find player {}, assuming they're offline and storing reward.", name);
         List<StoredReward> rewards = getRewardsForPlayer(name);
-        rewards.sort(Comparator.comparingLong(in -> in.timestamp));
         while(rewards.size() > getMaxStoredRewards()) {
             rewards.remove(0);
         }

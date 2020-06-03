@@ -14,15 +14,12 @@ import java.io.OutputStreamWriter;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 
 public class NetworkListenerThread extends Thread {
 
     private final String host;
     private final int port;
     private boolean isRunning = true;
-    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-DD HH:mm:ss Z");
 
     public NetworkListenerThread(String host, int port) {
         this.host = host;
@@ -47,7 +44,7 @@ public class NetworkListenerThread extends Thread {
                         byte[] bytes = new byte[256];
                         inputStream.read(bytes, 0, bytes.length);
                         String[] lines = new String(RSAUtil.decrypt(bytes, RSAUtil.getKeyPair().getPrivate())).split("\n");
-                        if(lines.length < 5) {
+                        if(lines.length < 4) {
                             error(lines);
                         } else {
                             String opcode = lines[0].trim();
@@ -55,15 +52,8 @@ public class NetworkListenerThread extends Thread {
                                 String service = lines[1].trim();
                                 String username = lines[2].trim();
                                 String address = lines[3].trim();
-                                String timestampString = lines[4].trim();
-                                long timestamp;
-                                try {
-                                    timestamp = DATE_FORMAT.parse(timestampString).getTime();
-                                } catch(ParseException e) {
-                                    error(lines);
-                                    ForgeVotifier.getLogger().error("invalid vote timestamp!", e);
-                                    continue; //timestamp is invalid
-                                }
+                                String timestamp = lines.length >= 5 ? lines[4].trim() : Long.toString(System.nanoTime() / 1_000_000L);
+                                
                                 ForgeVotifier.getLogger().info("received vote from {} at {} from service {}", username, timestamp, service);
                                 boolean found = false;
                                 for(String name : MinecraftServer.getServer().getConfigurationManager().getAllUsernames()) {

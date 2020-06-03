@@ -65,6 +65,7 @@ public class ForgeVotifier {
             FMLLog.bigWarning("FORGE VOTIFIER IS SERVERSIDE ONLY, ABORTING LAUNCH!");
             FMLCommonHandler.instance().exitJava(1, false);
         }
+        log.info("Votifier - Forge Version: Flea Fork");
         VotifierConfig.init(event);
         MinecraftForge.EVENT_BUS.register(new VoteEventHandler());
         RewardParser.init(event);

@@ -31,7 +31,7 @@ public class RewardItem extends Reward {
     }
 
     @Override
-    public void activate(MinecraftServer server, EntityPlayer player, long timestamp, String service, String address) {
+    public void activate(MinecraftServer server, EntityPlayer player, String timestamp, String service, String address) {
         ItemStack ret = itemStack.copy();
         if(ret.hasDisplayName()) ret.setStackDisplayName(replace(ret.getDisplayName(), player, service));
         if(nbtRaw != null) {
