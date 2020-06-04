@@ -39,6 +39,14 @@ public class VoteEventHandler {
         REWARDS.add(reward);
     }
 
+    public static void clearRewards(){
+        REWARDS.clear();
+    }
+
+    public static int getRewardsNum(){
+        return REWARDS.size();
+    }
+
     @SubscribeEvent(priority = EventPriority.LOW)
     public void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
         int rewardCount = RewardStore.getStore().getOutStandingRewardCount(event.player.getDisplayName());

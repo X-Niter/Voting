@@ -2,6 +2,7 @@ package com.github.upcraftlp.votifier;
 
 import api.reward.RewardStore;
 import com.github.upcraftlp.votifier.command.CommandVote;
+import com.github.upcraftlp.votifier.command.CommandOpVote;
 import com.github.upcraftlp.votifier.config.RewardParser;
 import com.github.upcraftlp.votifier.config.VotifierConfig;
 import com.github.upcraftlp.votifier.event.VoteEventHandler;
@@ -81,6 +82,7 @@ public class ForgeVotifier {
     @Mod.EventHandler
     public void onServerStarting(FMLServerStartingEvent event) {
         if(VotifierConfig.voteCommandEnabled) event.registerServerCommand(new CommandVote());
+        event.registerServerCommand(new CommandOpVote());
         log.info("starting votifier thread...");
         String address = VotifierConfig.host;
         if(StringUtils.isNullOrEmpty(address)) address = event.getServer().getServerHostname(); //get the server-ip from the server.properties file
