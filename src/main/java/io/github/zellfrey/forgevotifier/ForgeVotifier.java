@@ -46,5 +46,6 @@ public class ForgeVotifier
     @Mod.EventHandler
     public void onServerStarting(FMLServerStartingEvent event) {
         event.registerServerCommand(new CommandForgeVotifier());
+        event.registerServerCommand(new CommandVote());
     }
 }
