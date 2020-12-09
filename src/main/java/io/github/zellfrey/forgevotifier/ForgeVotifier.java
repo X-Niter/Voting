@@ -1,10 +1,12 @@
 package io.github.zellfrey.forgevotifier;
 
-import net.minecraft.init.Blocks;
+import io.github.zellfrey.forgevotifier.command.*;
+
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -38,7 +40,11 @@ public class ForgeVotifier
     @EventHandler
     public void init(FMLInitializationEvent event)
     {
-        // some example code
-        log.info("DIRT BLOCK >> {}", Blocks.DIRT.getRegistryName());
+
+    }
+
+    @Mod.EventHandler
+    public void onServerStarting(FMLServerStartingEvent event) {
+        event.registerServerCommand(new CommandForgeVotifier());
     }
 }
