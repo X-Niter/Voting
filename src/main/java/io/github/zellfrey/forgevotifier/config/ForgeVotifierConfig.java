@@ -14,6 +14,7 @@ public class ForgeVotifierConfig {
     String host, voteCommand;
     int port, maxOfflineRewards;
     boolean debug, updateCheck, betaUpdates;
+
     private final String defaultVoteCommandVal = "{\"text\":\"Vote here!\",\"hoverEvent\":{\"action\":\"show_text\",\"value\":[{\"text\":\"Curseforge\",\"color\":\"aqua\"}]},\"clickEvent\":{\"action\":\"open_url\",\"value\":\"https://minecraft.curseforge.com/projects/293830\"}}";
 
 
@@ -77,4 +78,19 @@ public class ForgeVotifierConfig {
 
         this.maxOfflineRewards = configuration.getInt("Offline Reward Count", category, 5, 0, 100, varComment);
     }
+
+    public String getHost(){ return this.host; }
+
+    public String getVoteCommand(){ return this.voteCommand; }
+
+    public int getPort(){return this.port;}
+
+    public int getMaxOfflineRewards(){return this.maxOfflineRewards;}
+
+    public boolean getDebug(){return this.debug;}
+
+    public boolean getUpdateCheck(){return this.updateCheck;}
+
+    public boolean getBetaUpdates(){return this.betaUpdates;}
+
 }
