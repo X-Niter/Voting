@@ -69,7 +69,8 @@ public class ForgeVotifierConfig {
     private void loadVotingConfig(String category, Configuration configuration){
         String varComment =
                 "The text that is shown when a player types /vote. Must be formatted in /tellraw nbt format\n" +
-                "For better /tellraw visual editing, go to the link: https://minecraft.tools/en/tellraw.php";
+                "For better /tellraw visual editing, go to the link: https://minecraft.tools/en/tellraw.php\n" +
+                "Placeholders: @PLAYER@ = player name,  @SERVICE@ = voting website name , @VOTECOUNT@ = number of votes";
 
         this.voteCommand = configuration.get(category,"Vote Command", defaultVoteCommandVal, varComment).getString();
 
