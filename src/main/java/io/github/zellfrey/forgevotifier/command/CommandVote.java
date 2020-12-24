@@ -1,5 +1,7 @@
 package io.github.zellfrey.forgevotifier.command;
 
+import io.github.zellfrey.forgevotifier.ForgeVotifier;
+
 import net.minecraft.command.*;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
@@ -30,6 +32,19 @@ public class CommandVote extends CommandBase{
         return comp1;
     }
 
+    private static ITextComponent getHelpUsage(){
+        ITextComponent comp1 = new TextComponentString("------Forge Votifier------" + "\n");
+        ITextComponent comp2 = new TextComponentString("/vote - Shows vote message" + "\n");
+        ITextComponent comp3 = new TextComponentString("/vote help - Displays more information of vote command" + "\n");
+        ITextComponent comp4 = new TextComponentString("/vote get - Checks for outstanding rewards & your vote count" + "\n");
+        ITextComponent comp5 = new TextComponentString("/vote claim - Claim outstanding rewards" + "\n");
+        ITextComponent comp6 = new TextComponentString("/vote top <count> - Shows the top voters on the server" + "\n");
+
+        comp1.appendSibling(comp2).appendSibling(comp3).appendSibling(comp4).appendSibling(comp5).appendSibling(comp6);
+
+        return comp1;
+    }
+
     @Override
     public String getName() {
         return "vote";
@@ -37,36 +52,43 @@ public class CommandVote extends CommandBase{
 
     @Override
     public String getUsage(ICommandSender sender) {
-        return "/vote <subCommand> [help:get:claim:top]";
+        return "/vote [help:get:claim:top]";
     }
 
     @Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
         EntityPlayerMP playerMP = getCommandSenderAsPlayer(sender);
 
-        if(args.length > 1){
+        if(args.length > 2){
             throw new SyntaxErrorException("Too many arguments");
         }
 
         if(args.length == 0) {
-//            playerMP.sendMessage(TextComponentUtils.processComponent(server, ITextComponent.Serializer.jsonToComponent(Reward.replace(VotifierConfig.voteCommand, sender, "")), playerMP));
-            playerMP.sendMessage(new TextComponentString("vote here!"));
+//            Reward.replace(ForgeVotifier.config.getVoteCommand(), sender, "")), playerMP));
+            ITextComponent voteTellRaw = ITextComponent.Serializer.jsonToComponent(ForgeVotifier.config.getVoteCommand());
+            playerMP.sendMessage(TextComponentUtils.processComponent(sender, voteTellRaw, playerMP));
         }
-        else if(args.length == 1){
+        if(args.length == 1 || args.length == 2){
             switch(args[0].toLowerCase()){
                 case "help":
-                    sender.sendMessage(new TextComponentString("Displays help"));
+                    playerMP.sendMessage(getHelpUsage());
                     break;
                 case "get":
-                    sender.sendMessage(new TextComponentString("check rewards, and check vote count"));
+                    playerMP.sendMessage(new TextComponentString("check rewards, and check vote count"));
                     break;
 
                 case "claim":
-                    sender.sendMessage(new TextComponentString("Claim rewards"));
+                    playerMP.sendMessage(new TextComponentString("Claim rewards"));
                     break;
 
                 case "top":
-                    sender.sendMessage(new TextComponentString("Shows top vote count"));
+                    if(args.length == 1){
+                        playerMP.sendMessage(new TextComponentString("Shows top vote count of top 5"));
+                    }
+                    else{
+                        int topVoters = tryParse(args[1], 5);
+                        playerMP.sendMessage(new TextComponentString("Shows top vote count of top " + topVoters));
+                    }
                     break;
 
                 default:
@@ -75,6 +97,15 @@ public class CommandVote extends CommandBase{
         }
         else{
             throw new WrongUsageException(getUsage(sender));
+        }
+    }
+
+    private static Integer tryParse(String text, int defaultVal) {
+        try {
+            return Integer.parseInt(text);
+        } catch (NumberFormatException e) {
+            ForgeVotifier.getLogger().error("Tried to parse string as integer. Falling onto default value");
+            return defaultVal;
         }
     }
 }
