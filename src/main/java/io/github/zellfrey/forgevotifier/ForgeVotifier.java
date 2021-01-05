@@ -3,6 +3,7 @@ package io.github.zellfrey.forgevotifier;
 import io.github.zellfrey.forgevotifier.command.*;
 import io.github.zellfrey.forgevotifier.config.*;
 
+import io.github.zellfrey.forgevotifier.util.TextUtils;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -45,6 +46,7 @@ public class ForgeVotifier {
         this.modConfigDictionary = event.getModConfigurationDirectory();
 
         loadConfig();
+        TextUtils.init();
     }
 
     @Mod.EventHandler

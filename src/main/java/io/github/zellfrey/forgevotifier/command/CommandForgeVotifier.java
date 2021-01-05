@@ -1,15 +1,34 @@
 package io.github.zellfrey.forgevotifier.command;
 
-import net.minecraft.command.*;
-import net.minecraft.entity.player.EntityPlayerMP;
+import io.github.zellfrey.forgevotifier.ForgeVotifier;
+import io.github.zellfrey.forgevotifier.api.reward.Reward;
+import io.github.zellfrey.forgevotifier.util.TextUtils;
+import net.minecraft.command.CommandException;
+import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.server.command.CommandTreeBase;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-public class CommandForgeVotifier extends CommandBase {
+public class CommandForgeVotifier extends CommandTreeBase {
+
+    public CommandForgeVotifier() {
+        addSubcommand(new CommandFVBroadcast());
+        addSubcommand(new CommandFVFakeVote());
+        addSubcommand(new CommandFVReload());
+    }
+
+    @Override
+    public int getRequiredPermissionLevel() { return 0; }
+
+    @Override
+    public boolean checkPermission(MinecraftServer server, ICommandSender sender) {
+        return true;
+    }
 
     @Override
     public String getName() {
@@ -17,7 +36,7 @@ public class CommandForgeVotifier extends CommandBase {
     }
 
     @Override
-    public String getUsage(ICommandSender sender) { return "/forgevotifier [help:reload:fakevote]"; }
+    public String getUsage(ICommandSender sender) { return "/forgevotifier - [help:reload:fakevote:broadcast]"; }
 
     @Override
     public List<String> getAliases()
@@ -27,61 +46,21 @@ public class CommandForgeVotifier extends CommandBase {
         return aliases;
     }
 
-    private static ITextComponent getHelpUsage(){
-        ITextComponent comp1 = new TextComponentString("------Forge Votifier------" + "\n");
-        ITextComponent comp2 = new TextComponentString("/forgevotifier help - Displays more information of commands" + "\n");
-        ITextComponent comp3 = new TextComponentString("/forgevotifier reload - Reloads config and voting rewards" + "\n");
-        ITextComponent comp4 = new TextComponentString("/forgevotifier fakevote <playerName> - Creates a fake vote for the specified player" + "\n");
-
-        comp1.appendSibling(comp2).appendSibling(comp3).appendSibling(comp4);
-
-        return comp1;
-    }
-
-    @Override
-    public int getRequiredPermissionLevel() {
-        return 4;
-    }
-
-    @Override
-    public boolean checkPermission(MinecraftServer server, ICommandSender sender) {
-        return true;
-    }
-
     @Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
 
-        if(args.length > 2){
-            throw new SyntaxErrorException("Too many arguments");
+        if(args.length == 0 || args[0].toLowerCase().equals("help")) {
+            TextUtils.getHelpUsage(sender, this.getUsage(sender), super.getSubCommands());
         }
-
-        if(args.length == 1 || args.length == 2){
-            switch(args[0].toLowerCase()){
-                case "help":
-                    sender.sendMessage(getHelpUsage());
-                    break;
-
-                case "reload":
-                    sender.sendMessage(new TextComponentString("reloading forge votifier"));
-                    break;
-
-                case "fakevote":
-                    EntityPlayerMP playerMP = getCommandSenderAsPlayer(sender);
-                    if(args.length == 1){
-                        playerMP.sendMessage(new TextComponentString("Creating vote for: " + playerMP.getName()));
-                    }
-                    else{
-                        String playerName = args[1].toLowerCase();
-                        playerMP.sendMessage(new TextComponentString("Creating vote for: " + playerName));
-                    }
-                    break;
-
-                default:
-                    throw new WrongUsageException(getUsage(sender));
-            }
+        else {
+            super.execute(server, sender, args);
         }
-        else{
-            throw new WrongUsageException(getUsage(sender));
-        }
+    }
+
+    @Override
+    public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos)
+    {
+        String [] subCmdNames = new String[] {"help", "reload", "fakevote", "broadcast"};
+        return args.length == 1 ? getListOfStringsMatchingLastWord(args, subCmdNames) : Collections.emptyList();
     }
 }
