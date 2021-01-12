@@ -4,6 +4,7 @@ import io.github.zellfrey.forgevotifier.command.*;
 import io.github.zellfrey.forgevotifier.config.*;
 
 import io.github.zellfrey.forgevotifier.util.TextUtils;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -34,7 +35,7 @@ public class ForgeVotifier {
     public static ForgeVotifier instance;
     public static ForgeVotifierConfig config;
     File modConfigDictionary;
-
+    public static String modConfigDirectory;
     private static final Logger log = LogManager.getLogger(MODID);
 
     public static Logger getLogger() {
@@ -44,8 +45,12 @@ public class ForgeVotifier {
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event){
         this.modConfigDictionary = event.getModConfigurationDirectory();
-
+        modConfigDirectory = Loader.instance().getConfigDir().getAbsolutePath() + MODID;
+        ForgeVotifier.getLogger().info(event.getModConfigurationDirectory().getName());
+        ForgeVotifier.getLogger().info(Loader.instance().getConfigDir().getAbsolutePath());
+        ForgeVotifier.getLogger().info(modConfigDirectory);
         loadConfig();
+        RewardParser.init(event);
         TextUtils.init();
     }
 
@@ -63,6 +68,7 @@ public class ForgeVotifier {
 
     public void loadConfig() {
         ForgeVotifier.config = new ForgeVotifierConfig();
+
         try {
             ForgeVotifier.config.load(new File(this.modConfigDictionary, "forgevotifier"));
         }
