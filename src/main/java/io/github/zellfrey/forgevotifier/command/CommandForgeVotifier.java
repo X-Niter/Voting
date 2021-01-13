@@ -61,6 +61,14 @@ public class CommandForgeVotifier extends CommandTreeBase {
     public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos)
     {
         String [] subCmdNames = new String[] {"help", "reload", "fakevote", "broadcast"};
-        return args.length == 1 ? getListOfStringsMatchingLastWord(args, subCmdNames) : Collections.emptyList();
+        if(args.length == 1){
+            return getListOfStringsMatchingLastWord(args, subCmdNames);
+        }
+        else if(args[0].toLowerCase().equals("fakevote")){
+            return getListOfStringsMatchingLastWord(args, server.getOnlinePlayerNames());
+        }
+        else{
+            return Collections.emptyList();
+        }
     }
 }
