@@ -1,10 +1,13 @@
 package io.github.zellfrey.forgevotifier.command;
 
+import io.github.zellfrey.forgevotifier.config.RewardParser;
+import io.github.zellfrey.forgevotifier.event.VoteEventHandler;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextFormatting;
 
 
 public class CommandFVReload extends CommandBase {
@@ -28,7 +31,19 @@ public class CommandFVReload extends CommandBase {
     }
 
     @Override
-    public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
-        sender.sendMessage(new TextComponentString("reloading forge votifier"));
+    public void execute(MinecraftServer server, ICommandSender sender, String[] args){
+        sender.sendMessage(new TextComponentString(TextFormatting.BLUE + "Reloading forge votifier"));
+
+        RewardParser.loadRewardData();
+        int rewardCount = VoteEventHandler.getRewardsNum();
+        int fileCount = RewardParser.configDir.listFiles().length;
+        if(rewardCount == 0){
+            sender.sendMessage(new TextComponentString(TextFormatting.RED + "Found 0 rewards!"));
+        }
+        if(fileCount == 0){
+            sender.sendMessage(new TextComponentString(TextFormatting.RED + "Found 0 reward files!"));
+        }
+        sender.sendMessage(new TextComponentString(TextFormatting.BLUE + "Votifier registered a total of " + rewardCount + " rewards in " + fileCount + " files!"));
+        sender.sendMessage(new TextComponentString(TextFormatting.GREEN + "Finished reloading"));
     }
 }

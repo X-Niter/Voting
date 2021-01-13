@@ -1,1 +1,11 @@
-{}
+{
+  "rewards": [
+    {
+      "type": "default",
+      "message": "Hi everybody @PLAYER@, @SERVICE@, @VOTECOUNT@",
+      "broadcast": true,
+      "tellraw": false,
+      "command": "give @PLAYER@ dirt 1"
+    }
+  ]
+}

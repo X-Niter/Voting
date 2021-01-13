@@ -40,11 +40,6 @@ public class VoteEventHandler {
                 iterator.remove();
             }
         }
-        ForgeVotifier.getLogger().info("Vote made");
-        ForgeVotifier.getLogger().info(event.getEntityPlayer());
-        ForgeVotifier.getLogger().info(event.getTimestamp());
-        ForgeVotifier.getLogger().info(event.getServiceDescriptor());
-        ForgeVotifier.getLogger().info(event.getRemoteAddress());
     }
 
     public static void addReward(Reward reward) {
