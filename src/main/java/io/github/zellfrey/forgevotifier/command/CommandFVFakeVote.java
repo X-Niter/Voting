@@ -36,14 +36,24 @@ public class CommandFVFakeVote extends CommandBase {
     @Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
 
-        EntityPlayerMP playerMP = args.length == 1 ? server.getPlayerList().getPlayerByUsername(args[0].toLowerCase())
-                : getCommandSenderAsPlayer(sender);
+        EntityPlayerMP playerMP = getCommandSenderAsPlayer(sender);
+
+        ForgeVotifier.getLogger().info(args.length);
+        if(args.length >= 1){
+                playerMP = server.getPlayerList().getPlayerByUsername(args[0].toLowerCase());
+        }
 
         sender.sendMessage(new TextComponentString(TextFormatting.GOLD + "Creating fake vote"));
 
-        FMLCommonHandler.instance().getMinecraftServerInstance().addScheduledTask(() -> {
+        if(playerMP != null){
             ForgeVotifier.getLogger().info("[{}] received vote from {} (service: {})", "", playerMP.getName(), "FAKE");
             MinecraftForge.EVENT_BUS.post(new VoteReceivedEvent(playerMP, "FAKE", "LOCAL", "NOW"));
-        });
+
+        }else{
+            String offlineUsername = args[0].toLowerCase();
+//            RewardStore.getStore().storePlayerReward(username, service, address, timestamp);
+//            PlayerRewardStore.storePlayerReward(offlineUsername, "FAKE", "LOCAL", "NOW");
+
+        }
     }
 }
