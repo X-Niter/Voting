@@ -11,11 +11,14 @@ import java.io.IOException;
 public class ForgeVotifierConfig {
 
     //config variables
-    String host, voteCommand;
-    int port, maxOfflineRewards;
-    boolean debug, updateCheck, betaUpdates;
+    private String host, voteCommand;
+    private int port, maxOfflineRewards;
+    private boolean debug, updateCheck, betaUpdates;
 
-    private final String defaultVoteCommandVal = "{\"text\":\"Vote here!\",\"hoverEvent\":{\"action\":\"show_text\",\"value\":[{\"text\":\"Curseforge\",\"color\":\"aqua\"}]},\"clickEvent\":{\"action\":\"open_url\",\"value\":\"https://minecraft.curseforge.com/projects/293830\"}}";
+    private final String defaultVoteCommandVal =
+            "{\"text\":\"Vote here!\",\"hoverEvent\":{\"action\":\"show_text\",\"value\":[{\"text\":\"Curseforge\"," +
+            "\"color\":\"aqua\"}]},\"clickEvent\":{\"action\":\"open_url\",\"value\":" +
+            "\"https://minecraft.curseforge.com/projects/293830\"}}";
 
 
     public void load(File configDictionary) throws IOException {

@@ -1,7 +1,9 @@
 package io.github.zellfrey.forgevotifier.command;
 
+import io.github.zellfrey.forgevotifier.ForgeVotifier;
 import io.github.zellfrey.forgevotifier.config.RewardParser;
 import io.github.zellfrey.forgevotifier.event.VoteEventHandler;
+import io.github.zellfrey.forgevotifier.util.TextUtils;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
@@ -32,7 +34,9 @@ public class CommandFVReload extends CommandBase {
 
     @Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] args){
-        sender.sendMessage(new TextComponentString(TextFormatting.BLUE + "Reloading forge votifier"));
+        sender.sendMessage(new TextComponentString(TextFormatting.BLUE + "Reloading Config and Voting rewards"));
+
+        ForgeVotifier.instance.loadConfig();
 
         RewardParser.loadRewardData();
         int rewardCount = VoteEventHandler.getRewardsNum();
