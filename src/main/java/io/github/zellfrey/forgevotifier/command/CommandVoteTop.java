@@ -32,13 +32,12 @@ public class CommandVoteTop extends CommandBase {
 
     @Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
-        EntityPlayerMP playerMP = getCommandSenderAsPlayer(sender);
         if(args.length == 0){
-            playerMP.sendMessage(new TextComponentString("Shows top vote count of top 5"));
+            sender.sendMessage(new TextComponentString("Shows top vote count of top 5"));
         }
         else{
             int topVoters = tryParse(args[0], 5);
-            playerMP.sendMessage(new TextComponentString("Shows top vote count of top " + topVoters));
+            sender.sendMessage(new TextComponentString("Shows top vote count of top " + topVoters));
         }
     }
 

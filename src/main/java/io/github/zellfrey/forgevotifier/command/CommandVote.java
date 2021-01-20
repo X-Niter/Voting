@@ -57,11 +57,12 @@ public class CommandVote extends CommandTreeBase {
 
     @Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
-        EntityPlayerMP playerMP = getCommandSenderAsPlayer(sender);
 
         if(args.length == 0) {
+            EntityPlayerMP playerMP = getCommandSenderAsPlayer(sender);
             String voteCmd = Reward.replace(ForgeVotifier.config.getVoteCommand(), sender, "", "");
             ITextComponent voteJSON = ITextComponent.Serializer.jsonToComponent(voteCmd);
+
             playerMP.sendMessage(TextComponentUtils.processComponent(sender, voteJSON, playerMP));
         }
         else {
