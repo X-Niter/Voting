@@ -43,7 +43,7 @@ public class CommandFVFakeVote extends CommandBase {
                 playerMP = server.getPlayerList().getPlayerByUsername(args[0].toLowerCase());
         }else{
             if(!(sender instanceof EntityPlayerMP)){
-                throw new SyntaxErrorException("Too few arguments");
+                throw new SyntaxErrorException("Executing command in console, need to specify a player");
             }
             playerMP = getCommandSenderAsPlayer(sender);
         }
