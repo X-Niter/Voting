@@ -6,6 +6,24 @@
       "broadcast": true,
       "tellraw": false,
       "command": "give @PLAYER@ dirt 1"
+    },
+    {
+      "type": "chance",
+      "chance": 50,
+      "message": "You got lucky and gained 3 iron",
+      "command": "give @PLAYER@ iron_ingot 3"
+    },
+    {
+      "type": "chance",
+      "chance": 25,
+      "message": "You got lucky and gained 3 gold",
+      "command": "give @PLAYER@ gold_ingot 3"
+    },
+    {
+      "type": "chance",
+      "chance": 12.5,
+      "message": "You got lucky and gained 3 diamond",
+      "command": "give @PLAYER@ diamond 3"
     }
   ]
 }

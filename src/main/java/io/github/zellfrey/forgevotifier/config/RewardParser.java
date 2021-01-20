@@ -7,6 +7,7 @@ import io.github.zellfrey.forgevotifier.api.RewardCreatedEvent;
 import io.github.zellfrey.forgevotifier.api.RewardException;
 import io.github.zellfrey.forgevotifier.api.reward.Reward;
 import io.github.zellfrey.forgevotifier.event.VoteEventHandler;
+import io.github.zellfrey.forgevotifier.reward.RewardChance;
 import io.github.zellfrey.forgevotifier.reward.RewardDefault;
 
 import net.minecraft.command.CommandBase;
@@ -78,6 +79,10 @@ public class RewardParser {
                             switch(type) {
                                 case "default":
                                     reward = new RewardDefault(commandRaw, msgRaw, broadcast, parseAsTellraw);
+                                    break;
+                                case "chance":
+                                    double chance = object.get("chance").getAsDouble();
+                                    reward = new RewardChance(commandRaw, msgRaw, broadcast, parseAsTellraw, chance);
                                     break;
                                 default: //allow for custom rewards from other mods
                                     RewardCreatedEvent rewardEvent = new RewardCreatedEvent(type, object);
