@@ -1,11 +1,13 @@
 package io.github.zellfrey.forgevotifier.api.reward;
 
+import java.util.ArrayList;
+
 public class StoredPlayer {
 
     private String username, uuid;
     private int voteCount;
 
-    public static int cumulativeTest = 0;
+    private ArrayList<StoredReward> storedRewards;
 
     public StoredPlayer(String username, String uuid, int voteCount){
         this.username = username;
@@ -13,6 +15,23 @@ public class StoredPlayer {
         this.voteCount = voteCount;
     }
 
+    public int getStoredRewardsSize(){ return this.storedRewards.size(); }
+
+    public String getUuid(){ return this.uuid; }
+
+    public String getUsername(){ return this.username; }
+
+    public int getVoteCount(){ return this.voteCount; }
+
+    public void addStoredReward(StoredReward reward){ this.storedRewards.add(reward); }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
+
+    public void addtoVoteCount(int numOfVotes){
+        this.voteCount += numOfVotes;
+    }
 }
 //player index consists of:
 //Hashmap String string + reward array

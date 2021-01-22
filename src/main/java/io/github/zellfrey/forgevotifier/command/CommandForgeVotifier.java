@@ -5,6 +5,7 @@ import io.github.zellfrey.forgevotifier.api.reward.Reward;
 import io.github.zellfrey.forgevotifier.util.TextUtils;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.command.WrongUsageException;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.server.command.CommandTreeBase;
@@ -53,7 +54,12 @@ public class CommandForgeVotifier extends CommandTreeBase {
             TextUtils.getHelpUsage(sender, this.getUsage(sender), super.getSubCommands());
         }
         else {
-            super.execute(server, sender, args);
+            try{
+                super.execute(server, sender, args);
+            }
+            catch (CommandException e){
+                throw new WrongUsageException(getUsage(sender));
+            }
         }
     }
 

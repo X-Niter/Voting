@@ -24,7 +24,7 @@ public class RewardCumulative extends Reward {
 
     @Override
     public void activate(MinecraftServer server, EntityPlayer player, String timestamp, String service, String address) throws RewardException {
-        int playerVotes = StoredPlayer.cumulativeTest;
+        int playerVotes = 2;
         ForgeVotifier.getLogger().info(playerVotes);
 
         if(this.votesToParse == playerVotes){
