@@ -11,7 +11,8 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.FMLCommonHandler;
+
+import io.github.zellfrey.forgevotifier.api.reward.StoredPlayer;
 
 public class CommandFVFakeVote extends CommandBase {
     @Override
@@ -49,7 +50,7 @@ public class CommandFVFakeVote extends CommandBase {
         }
 
         sender.sendMessage(new TextComponentString(TextFormatting.GOLD + "Creating fake vote"));
-
+        StoredPlayer.cumulativeTest++;
         if(playerMP != null){
             ForgeVotifier.getLogger().info("[{}] received vote from {} (service: {})", "", playerMP.getName(), "FAKE");
             MinecraftForge.EVENT_BUS.post(new VoteReceivedEvent(playerMP, "FAKE", "LOCAL", "NOW"));
