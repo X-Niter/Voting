@@ -72,22 +72,23 @@ public class RewardParser {
                             //Get default reward parameters
                             String msgRaw = object.has("message") ? object.get("message").getAsString() : "";
                             String commandRaw = object.has("command") ? object.get("command").getAsString() : "";
-                            boolean broadcast = object.has("broadcast") ? object.get("broadcast").getAsBoolean() : false;
-                            boolean parseAsTellraw = object.has("tellraw") ? object.get("tellraw").getAsBoolean() : false;
+                            boolean broadcast = object.has("broadcast") && object.get("broadcast").getAsBoolean();
+                            boolean parseAsTellraw = object.has("tellraw") && object.get("tellraw").getAsBoolean();
+                            RewardDefault rewardBasic = new RewardDefault(commandRaw, msgRaw, broadcast, parseAsTellraw);
 
                             String type = object.get("type").getAsString();
                             Reward reward;
                             switch(type) {
                                 case "default":
-                                    reward = new RewardDefault(commandRaw, msgRaw, broadcast, parseAsTellraw);
+                                    reward = rewardBasic;
                                     break;
                                 case "chance":
                                     double chance = object.get("chance").getAsDouble();
-                                    reward = new RewardChance(commandRaw, msgRaw, broadcast, parseAsTellraw, chance);
+                                    reward = new RewardChance(rewardBasic, chance);
                                     break;
                                 case "cumulative":
                                     int votesToParse = object.get("votes").getAsInt();
-                                    reward = new RewardCumulative(commandRaw, msgRaw, broadcast, parseAsTellraw, votesToParse);
+                                    reward = new RewardCumulative(rewardBasic, votesToParse);
                                     break;
                                 default: //allow for custom rewards from other mods
                                     RewardCreatedEvent rewardEvent = new RewardCreatedEvent(type, object);

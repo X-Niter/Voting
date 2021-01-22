@@ -9,10 +9,11 @@ import net.minecraft.server.MinecraftServer;
 
 public class RewardCumulative extends Reward {
 
+    private final RewardDefault rewardBasic;
     private final int votesToParse;
 
-    public RewardCumulative(String command, String voteMessage, boolean broadcast, boolean parseAsTellraw, int votesToParse) {
-        super(command, voteMessage, broadcast, parseAsTellraw);
+    public RewardCumulative(RewardDefault rewardBasic, int votesToParse) {
+        this.rewardBasic = rewardBasic;
         this.votesToParse = votesToParse;
     }
 
@@ -27,8 +28,7 @@ public class RewardCumulative extends Reward {
         ForgeVotifier.getLogger().info(playerVotes);
 
         if(this.votesToParse == playerVotes){
-            this.sendMessage(server, player, service, "0");
-            this.executeCommand(server,  player,  service,  "0");
+            rewardBasic.activate(server, player, timestamp, service, address);
         }
     }
 }

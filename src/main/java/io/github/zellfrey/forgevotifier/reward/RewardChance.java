@@ -7,10 +7,11 @@ import net.minecraft.server.MinecraftServer;
 
 public class RewardChance extends Reward {
 
+    private final RewardDefault rewardBasic;
     private final double chanceToBeat;
 
-    public RewardChance(String command, String voteMessage, boolean broadcast, boolean parseAsTellraw, double chance) {
-        super(command, voteMessage, broadcast, parseAsTellraw);
+    public RewardChance(RewardDefault rewardBasic, double chance) {
+        this.rewardBasic = rewardBasic;
         this.chanceToBeat = chance;
     }
 
@@ -24,8 +25,7 @@ public class RewardChance extends Reward {
         double playerChance = ((Math.random() * (100 - 0)) + 0);
 
         if(playerChance <= this.chanceToBeat){
-            this.sendMessage(server, player, service, "0");
-            this.executeCommand(server,  player,  service,  "0");
+            rewardBasic.activate(server, player, timestamp, service, address);
         }
     }
 }
