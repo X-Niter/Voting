@@ -54,18 +54,20 @@ public class VoteEventHandler {
         return REWARDS.size();
     }
 
-//    @SubscribeEvent(priority = EventPriority.LOW)
-//    public static void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
+    @SubscribeEvent(priority = EventPriority.LOW)
+    public static void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
 //        int rewardCount = RewardStore.getStore().getOutStandingRewardCount(event.player.getName());
-//        if(rewardCount > 0) {
-//            event.player.sendMessage(CommandVote.getOutstandingRewardsText(rewardCount));
-//        }
-//        MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
-//        if(VotifierConfig.updates.enableUpdateChecker && server.getPlayerList().getOppedPlayers().getPermissionLevel(event.player.getGameProfile()) == server.getOpPermissionLevel()) { //player is opped
+        int rewardCount = 1;
+        if(rewardCount > 0) {
+            event.player.sendMessage(CommandVote.getOutstandingRewardsText(rewardCount));
+        }
+
+        if(ForgeVotifier.config.getUpdateCheck() && ForgeVotifier.isOpped(event.player.getGameProfile())) { //player is opped
 //            ForgeVersion.CheckResult result = ModUpdateHandler.getResult();
-//            if(VotifierConfig.updates.enableUpdateChecker && ModUpdateHandler.hasUpdate(result)) {
-//                event.player.sendMessage(new TextComponentString("There's an update available for " + ForgeVotifier.MODNAME + ", check the server log for details!"));
+//            if(ModUpdateHandler.hasUpdate(result)) {
+                String updateString = "There's an update available for Forge Votifier, check the server log for details!";
+                event.player.sendMessage(new TextComponentString(updateString));
 //            }
-//        }
-//    }
+        }
+    }
 }

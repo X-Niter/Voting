@@ -1,10 +1,12 @@
 package io.github.zellfrey.forgevotifier;
 
+import com.mojang.authlib.GameProfile;
 import io.github.zellfrey.forgevotifier.command.*;
 import io.github.zellfrey.forgevotifier.config.*;
 
 import io.github.zellfrey.forgevotifier.util.TextUtils;
-import net.minecraftforge.fml.common.Loader;
+import net.minecraft.server.MinecraftServer;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -34,8 +36,7 @@ public class ForgeVotifier {
     @Mod.Instance(MODID)
     public static ForgeVotifier instance;
     public static ForgeVotifierConfig config;
-    File modConfigDictionary;
-    public static String modConfigDirectory;
+    File modConfigDirectory;
     private static final Logger log = LogManager.getLogger(MODID);
 
     public static Logger getLogger() {
@@ -44,11 +45,7 @@ public class ForgeVotifier {
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event){
-        this.modConfigDictionary = event.getModConfigurationDirectory();
-        modConfigDirectory = Loader.instance().getConfigDir().getAbsolutePath() + MODID;
-        ForgeVotifier.getLogger().info(event.getModConfigurationDirectory().getName());
-        ForgeVotifier.getLogger().info(Loader.instance().getConfigDir().getAbsolutePath());
-        ForgeVotifier.getLogger().info(modConfigDirectory);
+        this.modConfigDirectory = event.getModConfigurationDirectory();
         loadConfig();
         RewardParser.init(event);
         TextUtils.init();
@@ -66,11 +63,18 @@ public class ForgeVotifier {
         event.registerServerCommand(new CommandVote());
     }
 
+    public static boolean isOpped(GameProfile uuid){
+        MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
+        int playerLvl = server.getPlayerList().getOppedPlayers().getPermissionLevel(uuid);
+
+        return server.getOpPermissionLevel() == playerLvl;
+    }
+
     public void loadConfig() {
         ForgeVotifier.config = new ForgeVotifierConfig();
 
         try {
-            ForgeVotifier.config.load(new File(this.modConfigDictionary, "forgevotifier"));
+            ForgeVotifier.config.load(new File(this.modConfigDirectory, "forgevotifier"));
         }
         catch (IOException e) {
             e.printStackTrace();
