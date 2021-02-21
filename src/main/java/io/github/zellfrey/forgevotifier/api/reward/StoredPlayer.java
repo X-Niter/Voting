@@ -4,33 +4,14 @@ import java.util.ArrayList;
 
 public class StoredPlayer {
 
-    private String username, uuid;
-    private int voteCount;
+    public String username, uuid;
+    public int voteCount;
 
-    private ArrayList<StoredReward> storedRewards;
+    public ArrayList<StoredReward> storedRewards;
 
-    public StoredPlayer(String username, String uuid, int voteCount){
+    public StoredPlayer(String username, String uuid){
         this.username = username;
         this.uuid = uuid;
-        this.voteCount = voteCount;
-    }
-
-    public int getStoredRewardsSize(){ return this.storedRewards.size(); }
-
-    public String getUuid(){ return this.uuid; }
-
-    public String getUsername(){ return this.username; }
-
-    public int getVoteCount(){ return this.voteCount; }
-
-    public void addStoredReward(StoredReward reward){ this.storedRewards.add(reward); }
-
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
-    }
-
-    public void addtoVoteCount(int numOfVotes){
-        this.voteCount += numOfVotes;
     }
 }
 //player index consists of:
