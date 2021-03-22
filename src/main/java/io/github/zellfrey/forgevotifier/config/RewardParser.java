@@ -1,6 +1,7 @@
 package io.github.zellfrey.forgevotifier.config;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import io.github.zellfrey.forgevotifier.ForgeVotifier;
 import io.github.zellfrey.forgevotifier.api.RewardCreatedEvent;
@@ -45,13 +46,10 @@ public class RewardParser {
         File[] jsonFiles = configDir.listFiles((dir, name) -> name.toLowerCase(Locale.ROOT).endsWith(".json"));
         int regCount = 0;
 
-        if(jsonFiles == null) {
+        if(jsonFiles == null || jsonFiles.length == 0) {
             //if this returns null, something is seriously wrong.
             throw new IllegalStateException("error initializing votifier, could not list files for " + configDir.getAbsolutePath());
 
-        }
-        else if(configDir.listFiles().length == 0){
-            ForgeVotifier.getLogger().error("There were no files in " + configDir.getAbsolutePath());
         }
         else{
 
@@ -64,7 +62,8 @@ public class RewardParser {
                     }
                     JsonArray rewardArray = root.get("rewards").getAsJsonArray();
                     if(rewardArray.size() == 0){
-                        ForgeVotifier.getLogger().info("Votifier has found reward file {}. But there appears to be 0 rewards.\nSkipping file", jsonFile.getName());
+                        String noRewardArray = "Votifier has found reward file {}. But there appears to be 0 rewards.\nSkipping file";
+                        ForgeVotifier.getLogger().info(noRewardArray, jsonFile.getName());
                     }
                     else{
                         for(int i = 0; i < rewardArray.size(); i++) {
@@ -100,7 +99,8 @@ public class RewardParser {
                                 regCount++;
                             }
                             else {
-                                ForgeVotifier.getLogger().warn("ignoring unknown votifier reward type: {}", type);
+                                String unknownReward = "Found unknown reward type {}, {}. Ignoring.";
+                                ForgeVotifier.getLogger().warn(unknownReward, type, i);
                             }
                         }
                     }

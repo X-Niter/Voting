@@ -7,9 +7,12 @@ import io.github.zellfrey.forgevotifier.api.reward.*;
 import io.github.zellfrey.forgevotifier.command.CommandVote;
 import io.github.zellfrey.forgevotifier.config.ForgeVotifierConfig;
 //import com.github.upcraftlp.votifier.util.ModUpdateHandler;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.management.PlayerList;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.common.ForgeVersion;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -30,15 +33,19 @@ public class VoteEventHandler {
     public static void voteMade(VoteReceivedEvent event) {
         Iterator<Reward> iterator = REWARDS.iterator();
         MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
+
         while(iterator.hasNext()) {
             Reward reward = iterator.next();
-            try {
-                reward.activate(server, event.getEntityPlayer(), event.getTimestamp(), event.getServiceDescriptor(), event.getRemoteAddress());
-            }
-            catch (RewardException e) {
-                ForgeVotifier.getLogger().error("Error executing votifier reward, removing reward from reward list!", e);
-                iterator.remove();
-            }
+            server.addScheduledTask(() -> {
+                try {
+                    reward.activate(server, event.getEntityPlayer(), event.getTimestamp(), event.getServiceDescriptor(), event.getRemoteAddress());
+
+                }
+                catch (RewardException e) {
+                    ForgeVotifier.getLogger().error("Error executing votifier reward, removing reward from reward list!", e);
+                    iterator.remove();
+                }
+            });
         }
     }
 
