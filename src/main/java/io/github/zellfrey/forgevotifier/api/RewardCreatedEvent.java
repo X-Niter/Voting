@@ -1,6 +1,6 @@
 package io.github.zellfrey.forgevotifier.api;
 
-import io.github.zellfrey.forgevotifier.api.reward.Reward;
+import io.github.zellfrey.forgevotifier.reward.Reward;
 import com.google.gson.JsonObject;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.Event;

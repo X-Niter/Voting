@@ -1,7 +1,7 @@
 package io.github.zellfrey.forgevotifier.command;
 
 import io.github.zellfrey.forgevotifier.ForgeVotifier;
-import io.github.zellfrey.forgevotifier.api.reward.Reward;
+import io.github.zellfrey.forgevotifier.reward.Reward;
 import io.github.zellfrey.forgevotifier.util.TextUtils;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;

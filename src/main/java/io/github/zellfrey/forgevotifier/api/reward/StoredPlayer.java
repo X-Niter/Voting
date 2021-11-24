@@ -9,9 +9,12 @@ public class StoredPlayer {
 
     public ArrayList<StoredReward> storedRewards;
 
+    public static ArrayList<StoredPlayer> storedPlayers;
+
     public StoredPlayer(String username, String uuid){
         this.username = username;
         this.uuid = uuid;
+        this.voteCount = 0;
     }
 }
 //player index consists of:

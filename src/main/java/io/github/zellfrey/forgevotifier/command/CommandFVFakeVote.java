@@ -2,6 +2,7 @@ package io.github.zellfrey.forgevotifier.command;
 
 import io.github.zellfrey.forgevotifier.ForgeVotifier;
 import io.github.zellfrey.forgevotifier.api.VoteReceivedEvent;
+import io.github.zellfrey.forgevotifier.api.reward.StoredReward;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
@@ -13,6 +14,8 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.common.MinecraftForge;
 
 import io.github.zellfrey.forgevotifier.api.reward.StoredPlayer;
+
+import javax.annotation.Nullable;
 
 public class CommandFVFakeVote extends CommandBase {
     @Override
@@ -50,10 +53,13 @@ public class CommandFVFakeVote extends CommandBase {
         }
 
         sender.sendMessage(new TextComponentString(TextFormatting.GOLD + "Creating fake vote"));
-        StoredPlayer.cumulativeTest++;
+
         if(playerMP != null){
             ForgeVotifier.getLogger().info("[{}] received vote from {} (service: {})", "", playerMP.getName(), "FAKE");
+            StoredPlayer targetedPlayer = findOrCreateOnlinePlayer(playerMP.getName(), playerMP.getGameProfile().getId().toString());
+            targetedPlayer.voteCount++;
             MinecraftForge.EVENT_BUS.post(new VoteReceivedEvent(playerMP, "FAKE", "LOCAL", "NOW"));
+            sender.sendMessage(new TextComponentString("Player:" + playerMP.getName() + " has " + targetedPlayer.voteCount + " votes"));
 
         }else{
             String offlineUsername = args[0].toLowerCase();
@@ -61,5 +67,17 @@ public class CommandFVFakeVote extends CommandBase {
 //            PlayerRewardStore.storePlayerReward(offlineUsername, "FAKE", "LOCAL", "NOW");
 
         }
+    }
+
+    public StoredPlayer findOrCreateOnlinePlayer(String name, String uuid){
+
+        for(StoredPlayer player : StoredPlayer.storedPlayers){
+            if(player.username.equals(name)){
+                return player;
+            }
+        }
+        StoredPlayer newPlayer = new StoredPlayer(name, uuid);
+        StoredPlayer.storedPlayers.add(newPlayer);
+        return newPlayer;
     }
 }

@@ -1,7 +1,7 @@
-package io.github.zellfrey.forgevotifier.reward;
+package io.github.zellfrey.forgevotifier.reward.type;
 
 import io.github.zellfrey.forgevotifier.api.RewardException;
-import io.github.zellfrey.forgevotifier.api.reward.Reward;
+import io.github.zellfrey.forgevotifier.reward.Reward;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 

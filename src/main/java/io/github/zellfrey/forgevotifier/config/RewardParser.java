@@ -1,21 +1,15 @@
 package io.github.zellfrey.forgevotifier.config;
 
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import io.github.zellfrey.forgevotifier.ForgeVotifier;
 import io.github.zellfrey.forgevotifier.api.RewardCreatedEvent;
-import io.github.zellfrey.forgevotifier.api.RewardException;
-import io.github.zellfrey.forgevotifier.api.reward.Reward;
+import io.github.zellfrey.forgevotifier.reward.Reward;
 import io.github.zellfrey.forgevotifier.event.VoteEventHandler;
-import io.github.zellfrey.forgevotifier.reward.RewardChance;
-import io.github.zellfrey.forgevotifier.reward.RewardCumulative;
-import io.github.zellfrey.forgevotifier.reward.RewardDefault;
+import io.github.zellfrey.forgevotifier.reward.type.RewardChance;
+import io.github.zellfrey.forgevotifier.reward.type.RewardCumulative;
+import io.github.zellfrey.forgevotifier.reward.type.RewardDefault;
 
-import net.minecraft.command.CommandBase;
-import net.minecraft.command.NumberInvalidException;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;

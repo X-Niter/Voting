@@ -1,4 +1,4 @@
-package io.github.zellfrey.forgevotifier.api.reward;
+package io.github.zellfrey.forgevotifier.reward;
 
 import io.github.zellfrey.forgevotifier.api.RewardException;
 import net.minecraft.command.ICommandSender;
