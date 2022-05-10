@@ -30,6 +30,12 @@ public class CommandVote extends CommandBase {
     }
 
     @Override
+    public boolean canCommandSenderUseCommand(ICommandSender sender)
+    {
+        return true;
+    }
+
+    @Override
     public void processCommand(ICommandSender sender, String[] args) throws CommandException {
         EntityPlayerMP playerMP = getCommandSenderAsPlayer(sender);
         if(args.length == 0) {
@@ -67,7 +73,7 @@ public class CommandVote extends CommandBase {
 
     @Override
     public List<String> addTabCompletionOptions(ICommandSender sender, String[] args) {
-        if(args.length == 1) return getListOfStringsMatchingLastWord(args, "claim");
+        if(args.length == 1) return getListOfStringsMatchingLastWord(args, "claim", "get");
         return super.addTabCompletionOptions(sender, args);
     }
 }
