@@ -7,7 +7,7 @@
   "mcversion": "${mcversion}",
   "url": "${url}",
   "updateUrl": "${updateUrl}",
-  "authorList": ["UpcraftLP"],
+  "authorList": ["UpcraftLP", "Beardedflea/Zellfrey"],
   "credits": "(C)2018-${year} UpcraftLP",
   "logoFile": "",
   "screenshots": [],

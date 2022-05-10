@@ -1,0 +1,112 @@
+/*
+This was originally used to build the project for Voting 1.7.10. Recently I had issues with building the project.
+I've come to the conclusion that instead of relying on external sources to compile code I am now localising everything
+so the project is easier to maintain and debug in the future.
+Yeh but why tho?
+As the internet gets older there is more of a likely chance that a URL would be dead. In order to mitigate that I've
+decided to go for the "all or nothing" approach.
+Minecraft 1.7.10 is 7 years, 10 months, and 14 days old today, courtesy of https://howoldisminecraft1710.today/
+
+- Beardedflea/Zellfrey 10/05/2022
+*/
+
+//https://gist.githubusercontent.com/UpcraftLP/0a98a7dfe913bd3e99073efa7ad0353b/raw
+
+ext.MAPPINGS_URL = "http://files.minecraftforge.net/maven/de/oceanlabs/mcp/versions.json"
+/*
+"1.7.10": {"snapshot": [20140925, 20140924, 20140923, 20140922,
+    20140921, 20140920, 20140918, 20140917, 20140916, 20140915,
+    20140914, 20140913, 20140912, 20140911, 20140910, 20140909, 20140908],
+    "stable": [12, 11, 10, 9, 8]},
+*/
+ext.gitHash = getGitHash()
+def getGitHash() {
+    def process = 'git rev-parse --short HEAD'.execute()
+    process.waitFor()
+    return '-' + (process.exitValue() ? 'unknown' : process.text.trim())
+}
+
+ext.buildName = ("release".equals(project.release_type) ? "" : ("-" + "${project.release_type}-" + getDate()))
+def getDate() {
+    def date = new Date()
+    def formattedDate = date.format('yyyyMMddHHmmss')
+    return formattedDate
+}
+
+ext.changeLog = getChangelogText()
+String getChangelogText() {
+    def changelogFile = new File(project.projectDir, "changelog.md")
+    String str = ''
+    if(!changelogFile.exists()) {
+        System.out.println("No changelog file found, creating one at \"" + changelogFile.getAbsolutePath() + "\"")
+        changelogFile.createNewFile()
+        makeNewChangelog(changelogFile)
+        return str
+    }
+    String separator = '---'
+    int lineCount = 0
+    boolean done = false
+    changelogFile.eachLine {
+        if (done || it == null) {
+            return
+        }
+        if (lineCount < 3) {
+            lineCount++
+            if (it.startsWith(separator)) {
+                return ""
+            }
+        }
+        if (!it.startsWith(separator)) {
+            str += "$it" + (lineCount < 3 ? ':\n\n' : '\n')
+            return
+        }
+        done = true // once we go past the first version block, parse no more
+    }
+    str += "\n\n see full changelog [here](${project.changelog_url} \"Changelog\")"
+    return str
+}
+
+//Populate a new blank changelog for the next version
+def makeNewChangelog(File changelogFile) {
+    String newText = '------------------------------------------------------\n' +
+            'Version '+ ext.buildName + '\n' +
+            '------------------------------------------------------\n' +
+            'Additions\n' +
+            '- None\n' +
+            '\n' +
+            'Changes\n' +
+            '- None\n' +
+            '\n' +
+            'Bug Fixes\n' +
+            '- None\n'
+    String oldText = changelogFile.getText()
+    changelogFile.setText(newText + oldText);
+}
+
+ext.mappings = getLatestMappings()
+import groovy.json.JsonSlurper
+def getLatestMappings() {
+    println("updating mappings from " + ext.MAPPINGS_URL)
+    def vJson = new JsonSlurper().parse(new URL("${ext.MAPPINGS_URL}"))
+    String mcVer
+    if(vJson.keySet().contains(project.mc_version)) {
+        mcVer = project.mc_version
+    }
+    else {
+        char[] chars = "${project.mc_version}".toCharArray()
+        StringBuilder builder = new StringBuilder()
+        boolean dot = false
+        for (c in chars) {
+            if (c == '.') {
+                if(dot) break
+                dot = true
+            }
+            builder.append(c)
+        }
+        mcVer = builder.toString()
+        if(!vJson.keySet().contains(mcVer)) {
+            return "undefined"
+        }
+    }
+    return "snapshot_" + vJson.get(mcVer).snapshot[0]
+}
