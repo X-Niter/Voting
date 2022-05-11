@@ -12,9 +12,12 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.command.SyntaxErrorException;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.MinecraftForge;
+
+import java.util.List;
 
 
 public class CommandOpVote extends CommandBase {
@@ -32,6 +35,16 @@ public class CommandOpVote extends CommandBase {
     @Override
     public int getRequiredPermissionLevel() {
         return 4;
+    }
+
+    @Override
+    public boolean canCommandSenderUseCommand(ICommandSender sender)
+    {
+        boolean isOpped = false;
+        for(String name : MinecraftServer.getServer().getConfigurationManager().getOppedPlayerNames()){
+            if(sender.getCommandSenderName().equals(name)) isOpped = true;
+        }
+        return isOpped;
     }
 
     public static void getOpHelpUsage(ICommandSender sender) {
@@ -80,7 +93,13 @@ public class CommandOpVote extends CommandBase {
         }
     }
 
-    public static void reloadData(ICommandSender sender){
+    @Override
+    public List<String> addTabCompletionOptions(ICommandSender sender, String[] args) {
+        if(args.length == 1) return getListOfStringsMatchingLastWord(args, "help", "reload", "create", "fakevote");
+        return super.addTabCompletionOptions(sender, args);
+    }
+
+    private static void reloadData(ICommandSender sender){
         sender.addChatMessage(new ChatComponentText(EnumChatFormatting.AQUA + "Reloading Forge Votifier rewards"));
 
         RewardParser.reloadRewardData();
