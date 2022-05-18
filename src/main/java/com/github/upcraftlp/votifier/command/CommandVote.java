@@ -29,6 +29,7 @@ public class CommandVote extends CommandBase {
         return "/vote [claim|get]";
     }
 
+    //I do not know why, but this is the right method to use, NOT getRequiredPermissionLevel().
     @Override
     public boolean canCommandSenderUseCommand(ICommandSender sender)
     {
