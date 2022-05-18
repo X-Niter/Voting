@@ -48,6 +48,7 @@ public class ForgeVotifier {
         this.modConfigDirectory = event.getModConfigurationDirectory();
         loadConfig();
         RewardParser.init(event);
+        //RewardStore.init(event);
         TextUtils.init();
     }
 
