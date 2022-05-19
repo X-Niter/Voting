@@ -22,11 +22,11 @@ public class CommandForgeVotifier extends CommandTreeBase {
     }
 
     @Override
-    public int getRequiredPermissionLevel() { return 0; }
+    public int getRequiredPermissionLevel() { return 4; }
 
     @Override
     public boolean checkPermission(MinecraftServer server, ICommandSender sender) {
-        return true;
+        return sender.canUseCommand(getRequiredPermissionLevel(), this.getName());
     }
 
     @Override

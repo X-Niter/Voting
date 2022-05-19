@@ -23,16 +23,6 @@ public class CommandFVReload extends CommandBase {
     public String getUsage(ICommandSender sender) { return "/forgevotifier reload - Reloads config and voting rewards"; }
 
     @Override
-    public int getRequiredPermissionLevel() {
-        return 4;
-    }
-
-    @Override
-    public boolean checkPermission(MinecraftServer server, ICommandSender sender) {
-        return true;
-    }
-
-    @Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] args){
         sender.sendMessage(new TextComponentString(TextFormatting.BLUE + "Reloading Config and Voting rewards"));
 

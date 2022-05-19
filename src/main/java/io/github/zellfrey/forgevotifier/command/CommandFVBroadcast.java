@@ -19,16 +19,6 @@ public class CommandFVBroadcast extends CommandBase{
     public String getUsage(ICommandSender sender) { return "/forgevotifier broadcast <message> - Sends a message to all online players"; }
 
     @Override
-    public int getRequiredPermissionLevel() {
-        return 4;
-    }
-
-    @Override
-    public boolean checkPermission(MinecraftServer server, ICommandSender sender) {
-        return true;
-    }
-
-    @Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
 
         if(args.length == 0){
