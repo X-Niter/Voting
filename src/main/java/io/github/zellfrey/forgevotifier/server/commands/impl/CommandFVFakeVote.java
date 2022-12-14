@@ -1,23 +1,16 @@
-package io.github.zellfrey.forgevotifier.command;
+package io.github.zellfrey.forgevotifier.server.commands.impl;
 
 import io.github.zellfrey.forgevotifier.ForgeVotifier;
 import io.github.zellfrey.forgevotifier.api.VoteReceivedEvent;
-import io.github.zellfrey.forgevotifier.api.reward.StoredReward;
-import net.minecraft.command.CommandBase;
-import net.minecraft.command.CommandException;
-import net.minecraft.command.ICommandSender;
-import net.minecraft.command.SyntaxErrorException;
-import net.minecraft.entity.player.EntityPlayerMP;
+import io.github.zellfrey.forgevotifier.api.reward.StoredPlayer;
+import net.minecraft.command.*;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.common.MinecraftForge;
 
-import io.github.zellfrey.forgevotifier.api.reward.StoredPlayer;
-
-import javax.annotation.Nullable;
-
-public class CommandFVFakeVote extends CommandBase {
+public class CommandFVFakeVote extends CommandSource {
     @Override
     public String getName() {
         return "fakevote";
@@ -29,14 +22,14 @@ public class CommandFVFakeVote extends CommandBase {
     }
 
     @Override
-    public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
+    public void execute(MinecraftServer server, ICommandSource sender, String[] args) throws CommandException {
 
-        EntityPlayerMP playerMP;
+        ServerPlayerEntity playerMP;
 
         if(args.length >= 1){
                 playerMP = server.getPlayerList().getPlayerByUsername(args[0].toLowerCase());
         }else{
-            if(!(sender instanceof EntityPlayerMP)){
+            if(!(sender instanceof ServerPlayerEntity)){
                 throw new SyntaxErrorException("Executing command in console, need to specify a player");
             }
             playerMP = getCommandSenderAsPlayer(sender);

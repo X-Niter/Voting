@@ -1,6 +1,6 @@
-package io.github.zellfrey.forgevotifier.command;
+package io.github.zellfrey.forgevotifier.server.commands.impl;
 
-import io.github.zellfrey.forgevotifier.util.TextUtils;
+import io.github.zellfrey.forgevotifier.server.util.TextUtils;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;

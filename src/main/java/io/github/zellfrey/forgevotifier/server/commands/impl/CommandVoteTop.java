@@ -1,10 +1,9 @@
-package io.github.zellfrey.forgevotifier.command;
+package io.github.zellfrey.forgevotifier.server.commands.impl;
 
 import io.github.zellfrey.forgevotifier.ForgeVotifier;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.TextComponentString;
 

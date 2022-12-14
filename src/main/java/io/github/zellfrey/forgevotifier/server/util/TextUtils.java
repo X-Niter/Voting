@@ -1,14 +1,18 @@
-package io.github.zellfrey.forgevotifier.util;
+package io.github.zellfrey.forgevotifier.server.util;
 
 import io.github.zellfrey.forgevotifier.ForgeVotifier;
-import net.minecraft.command.ICommand;
+import net.minecraft.client.Minecraft;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.command.ICommandSource;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.server.management.PlayerList;
+import net.minecraft.util.text.*;
+import net.minecraftforge.fml.server.ServerLifecycleHooks;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -69,37 +73,37 @@ public class TextUtils {
         return msg;
     }
 
-    public static void getHelpUsage(ICommandSender sender, String rootCmd, Collection subCmds){
+    public static void getHelpUsage(ICommandSource sender, String rootCmd, Collection subCmds){
 
         ITextComponent[] voteHelpMessage = new ITextComponent[3];
-        voteHelpMessage[0] = new TextComponentString("---------=Forge Votifier=----------");
-        voteHelpMessage[0].setStyle(new Style().setColor(TextFormatting.DARK_AQUA));
+        voteHelpMessage[0] = new StringTextComponent("---------=Forge Votifier=----------");
+        voteHelpMessage[0].getStyle().setColor(Color.fromHex("249D9F"));
 
         voteHelpMessage[1] = getPrettyCommandUsage(rootCmd);
 
-        voteHelpMessage[2] = new TextComponentString("").setStyle(new Style().setColor(TextFormatting.DARK_GREEN));
-        Iterator<ICommand> voteSubCommands = subCmds.iterator();
+        voteHelpMessage[2] = new StringTextComponent("").setStyle(Style.EMPTY.setColor(Color.fromHex("006400")));
+        Iterator voteSubCommands = subCmds.iterator();
 
         while(voteSubCommands.hasNext()){
-            voteHelpMessage[2].appendSibling(getPrettyCommandUsage(voteSubCommands.next().getUsage(sender)));
+            voteHelpMessage[2].getSiblings(getPrettyCommandUsage(voteSubCommands.next().getUsage(sender)));
 
             if (voteSubCommands.hasNext()){
-                voteHelpMessage[2].appendText("\n");
+                voteHelpMessage[2].getSiblings().add(new StringTextComponent("\n"));
             }
         }
-        TextUtils.sendMessages(voteHelpMessage, sender);
+        TextUtils.sendMessages(voteHelpMessage, sender.);
     }
 
     public static ITextComponent getPrettyCommandUsage(String commandUsage){
         String[] usageSplit = commandUsage.split("-");
 
-        ITextComponent cmdInput = new TextComponentString(usageSplit[0] + "-");
-        cmdInput.setStyle(new Style().setColor(TextFormatting.GOLD));
+        ITextComponent cmdInput = new ITextComponent.(usageSplit[0] + "-");
+        cmdInput.setStyle(Style.EMPTY.setColor(Color.fromHex("FFD700")));
 
-        ITextComponent cmdInfo = new TextComponentString(usageSplit[1]);
-        cmdInfo.setStyle(new Style().setColor(TextFormatting.DARK_GREEN));
+        ITextComponent cmdInfo = new StringTextComponent(usageSplit[1]);
+        cmdInfo.setStyle(Style.EMPTY.setColor(Color.fromHex("023020")));
 
-        return cmdInput.appendSibling(cmdInfo);
+        return cmdInput.getSiblings().;
     }
 
     public static void printDebugStrConsole(String... sArgs){
@@ -108,9 +112,34 @@ public class TextUtils {
         }
     }
 
-    public static void sendMessages(ITextComponent [] msgsToSend, ICommandSender sender){
+    public static void sendMessages(ITextComponent [] msgsToSend, ServerPlayerEntity playerSender){
         for(ITextComponent msg : msgsToSend){
-            sender.sendMessage(msg);
+            sendStatusMessage(playerSender, msg, false);
+        }
+    }
+
+    // Chat msg
+
+    public static void sendChatMessage(ServerPlayerEntity player, IFormattableTextComponent textComponent) {
+        sendStatusMessage(player, textComponent, false);
+    }
+
+    public static void sendChatMessage(ServerPlayerEntity player, String translationKey, Object... args) {
+        sendStatusMessage(player, new TranslationTextComponent(translationKey, args), false);
+    }
+
+    private static void sendStatusMessage(ServerPlayerEntity player, IFormattableTextComponent formattableTextComponent, boolean actionBar) {
+        player.sendStatusMessage(formattableTextComponent, actionBar);
+    }
+
+    private static void sendStatusMessage(ServerPlayerEntity player, ITextComponent textComponent, boolean actionBar) {
+        player.sendStatusMessage(textComponent, actionBar);
+    }
+
+    public static void sendGlobalMessage(PlayerList players, IFormattableTextComponent textComponent, boolean actionBar) {
+        for(int i = 0; i < players.getPlayers().size(); ++i) {
+            ServerPlayerEntity player = players.getPlayers().get(i);
+            sendStatusMessage(player, textComponent, actionBar);
         }
     }
 

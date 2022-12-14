@@ -1,19 +1,18 @@
-package io.github.zellfrey.forgevotifier.config;
+package io.github.zellfrey.forgevotifier.server.config;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import io.github.zellfrey.forgevotifier.ForgeVotifier;
 import io.github.zellfrey.forgevotifier.api.RewardCreatedEvent;
-import io.github.zellfrey.forgevotifier.reward.Reward;
-import io.github.zellfrey.forgevotifier.event.VoteEventHandler;
-import io.github.zellfrey.forgevotifier.reward.type.RewardChance;
-import io.github.zellfrey.forgevotifier.reward.type.RewardCumulative;
-import io.github.zellfrey.forgevotifier.reward.type.RewardDefault;
-
+import io.github.zellfrey.forgevotifier.server.event.VoteEventHandler;
+import io.github.zellfrey.forgevotifier.server.reward.Reward;
+import io.github.zellfrey.forgevotifier.server.reward.type.RewardChance;
+import io.github.zellfrey.forgevotifier.server.reward.type.RewardCumulative;
+import io.github.zellfrey.forgevotifier.server.reward.type.RewardDefault;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import com.google.gson.JsonParser;
 import org.apache.commons.io.FileUtils;
 
 import java.io.*;

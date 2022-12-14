@@ -1,9 +1,9 @@
 package io.github.zellfrey.forgevotifier.api;
 
-import io.github.zellfrey.forgevotifier.reward.Reward;
 import com.google.gson.JsonObject;
+import io.github.zellfrey.forgevotifier.server.reward.Reward;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.eventhandler.Event;
+import net.minecraftforge.eventbus.api.Event;
 
 import javax.annotation.Nullable;
 
@@ -19,18 +19,24 @@ public class RewardCreatedEvent extends Event {
     /**
      * fired on the {@link MinecraftForge#EVENT_BUS} when an unknown Reward is to be parsed
      *
-     * @param json
-     * @param type
+     * @param json JsonObject
+     * @param type String
      */
     public RewardCreatedEvent(String type, JsonObject json) {
         this.type = type;
         this.json = json;
     }
 
+    /**
+     * Returns {@link RewardCreatedEvent#json}
+     */
     public JsonObject getJson() {
         return json;
     }
 
+    /**
+     * Returns {@link RewardCreatedEvent#type}
+     */
     public String getRewardType() {
         return type;
     }

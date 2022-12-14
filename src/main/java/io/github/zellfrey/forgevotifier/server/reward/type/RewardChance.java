@@ -1,8 +1,8 @@
-package io.github.zellfrey.forgevotifier.reward.type;
+package io.github.zellfrey.forgevotifier.server.reward.type;
 
 import io.github.zellfrey.forgevotifier.api.RewardException;
-import io.github.zellfrey.forgevotifier.reward.Reward;
-import net.minecraft.entity.player.EntityPlayer;
+import io.github.zellfrey.forgevotifier.server.reward.Reward;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.server.MinecraftServer;
 
 public class RewardChance extends Reward {
@@ -21,8 +21,8 @@ public class RewardChance extends Reward {
     }
 
     @Override
-    public void activate(MinecraftServer server, EntityPlayer player, String timestamp, String service, String address) throws RewardException {
-        double playerChance = ((Math.random() * (100 - 0)) + 0);
+    public void activate(MinecraftServer server, ServerPlayerEntity player, String timestamp, String service, String address) throws RewardException {
+        double playerChance = ((Math.random() * (100)) + 0);
 
         if(playerChance <= this.chanceToBeat){
             rewardBasic.activate(server, player, timestamp, service, address);

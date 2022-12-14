@@ -1,7 +1,7 @@
-package io.github.zellfrey.forgevotifier.command;
+package io.github.zellfrey.forgevotifier.server.commands.impl;
 
-import io.github.zellfrey.forgevotifier.util.TextUtils;
-import net.minecraft.command.*;
+import io.github.zellfrey.forgevotifier.server.util.TextUtils;
+import net.minecraft.command.CommandException;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;

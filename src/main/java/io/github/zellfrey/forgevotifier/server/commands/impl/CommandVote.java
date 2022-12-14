@@ -1,23 +1,26 @@
-package io.github.zellfrey.forgevotifier.command;
+package io.github.zellfrey.forgevotifier.server.commands.impl;
 
+import com.mojang.brigadier.CommandDispatcher;
 import io.github.zellfrey.forgevotifier.ForgeVotifier;
-import io.github.zellfrey.forgevotifier.reward.Reward;
-import io.github.zellfrey.forgevotifier.util.TextUtils;
+import io.github.zellfrey.forgevotifier.server.reward.Reward;
+import io.github.zellfrey.forgevotifier.server.util.TextUtils;
 import net.minecraft.command.CommandException;
-import net.minecraft.command.ICommandSender;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.command.CommandSource;
+import net.minecraft.command.Commands;
+import net.minecraft.command.ICommandSource;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.*;
 import net.minecraft.util.text.event.ClickEvent;
 import net.minecraft.util.text.event.HoverEvent;
-import net.minecraftforge.server.command.CommandTreeBase;
 
 import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
 
-public class CommandVote extends CommandTreeBase {
+public class CommandVote extends Commands {
+
+    private final CommandDispatcher<CommandSource> dispatcher = new CommandDispatcher<>();
 
     public CommandVote() {
         addSubcommand(new CommandVoteClaim());
@@ -25,33 +28,38 @@ public class CommandVote extends CommandTreeBase {
         addSubcommand(new CommandVoteTop());
     }
 
-    @Override
+
     public int getRequiredPermissionLevel() { return 0; }
 
-    @Override
-    public boolean checkPermission(MinecraftServer server, ICommandSender sender) {
+
+    public boolean checkPermission(MinecraftServer server, ICommandSource sender) {
         return true;
     }
 
-    @Override
     public String getName() {
         return "vote";
     }
 
-    @Override
-    public String getUsage(ICommandSender sender) {
+
+    public String getUsage(ICommandSource sender) {
         return "/vote - Show voting information";
     }
 
 
     public static ITextComponent getOutstandingRewardsText(int rewardsOutstanding) {
-        ITextComponent comp1 = new TextComponentString("You have " + rewardsOutstanding + " rewards outstanding, use ");
-        ITextComponent comp2 = new TextComponentString("/vote claim").setStyle(new Style().setColor(TextFormatting.GREEN));
-        ITextComponent comp3 = new TextComponentString(" to claim or ");
-        ITextComponent clickToVote = new TextComponentString("click to vote").setStyle(new Style().setColor(TextFormatting.AQUA).setItalic(false));
-        ITextComponent comp4 = new TextComponentString("click here").setStyle(new Style().setColor(TextFormatting.AQUA).setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, clickToVote)).setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/vote claim")));
-        ITextComponent comp5 = new TextComponentString(" to claim them!");
-        comp1.appendSibling(comp2).appendSibling(comp3).appendSibling(comp4).appendSibling(comp5);
+        //List<ITextComponent> tSiblings = Lists.newArrayList();
+
+        ITextComponent comp1 = new StringTextComponent("You have " + rewardsOutstanding + " rewards outstanding, use ");
+        ITextComponent comp2 = new StringTextComponent("/vote claim").setStyle(Style.EMPTY.setColor(Color.fromHex("00FF00")));
+        ITextComponent comp3 = new StringTextComponent(" to claim or ");
+        ITextComponent clickToVote = new StringTextComponent("click to vote").setStyle(new Style().setColor(TextFormatting.AQUA).setItalic(false));
+        ITextComponent comp4 = new StringTextComponent("click here").setStyle(new Style().setColor(TextFormatting.AQUA).setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, clickToVote)).setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/vote claim")));
+        ITextComponent comp5 = new StringTextComponent(" to claim them!");
+
+        comp1.getSiblings().add(comp2);
+        comp1.getSiblings().add(comp3);
+        comp1.getSiblings().add(comp4);
+        comp1.getSiblings().add(comp5);
         return comp1;
     }
 

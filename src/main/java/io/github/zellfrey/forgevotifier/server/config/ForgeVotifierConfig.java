@@ -1,4 +1,4 @@
-package io.github.zellfrey.forgevotifier.config;
+package io.github.zellfrey.forgevotifier.server.config;
 
 import net.minecraftforge.common.config.Configuration;
 

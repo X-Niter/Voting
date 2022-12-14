@@ -1,4 +1,4 @@
-package io.github.zellfrey.forgevotifier.command;
+package io.github.zellfrey.forgevotifier.server.commands.impl;
 
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
